@@ -55,29 +55,48 @@ Use the main summary sections as second-level list items under the note topic, n
 
 * Core Mechanism
 
-  ...
+  * **核心框架：<Framework Name>**：Explain the complete operating loop and why it is the paper's central claim.
+
+    ![Framework](assets/NOTES.assets/framework.png)
+
+    > [!NOTE]
+    > **Figure 1. <Original caption or concise overview>.** Explain the meaningful regions and how they form the framework.
+
+    $$
+    \text{Core framework objective}
+    $$
 
 * Experiment
 
-  * Claim-bearing testbed or task figure, with part-by-part callout explanation.
-  * Concise table purpose and outcome, followed by the table image.
+  * **<Experiment or benchmark name>**：Combine the setup and conclusion for this experiment in one entry.
+
+    ![Principal result table](assets/NOTES.assets/main-results.png)
+
+    > [!NOTE]
+    > **Table 1. <Original caption or concise overview>.** State the comparison, key outcome, and any boundary needed to interpret it.
 
 * Pipeline
 
-  ...
+  ```mermaid
+  flowchart LR
+      Input[Input] --> Model[Core model]
+      Model --> Update[Training or feedback]
+      Update --> Output[Output]
+  ```
 
 * Critical Thinking
 
-  * **Pros**: ...
-  * **Cons**: ...
-  * **Trade-offs**: ...
-  * **Empirical Support**: ...
-  * **Future Directions**: ...
+  * **Pros**: Architectural strengths that are not a recap of experiment results.
+  * **Cons**: Concrete failure modes and broken assumptions.
+  * **Trade-offs**: What the design sacrifices and whether that cost is justified.
+  * **Empirical Support**: Whether the evidence design supports the claims, without restating results.
+  * **Future Directions**: The next unresolved bottleneck.
 ```
 
 - `Takeaway` must be written strictly in English. Keep only a compact compositional formula when one clearly captures the method; otherwise use one or two concise sentences. Render the formula as plain text, without backticks, quotation marks, or other wrapping.
 - `Motivation`, `Core Mechanism`, `Experiment`, `Pipeline`, and `Critical Thinking` should use the same `* Section Name` (or `- Section Name`) list-item format.
-- Indent prose, nested bullets, formulas, figures, and code/mermaid blocks under their parent section (2 spaces) so the list structure remains foldable in Typora.
+- Indent every detail under its owning section: prose, formulas, figures, NOTE callouts, and code/Mermaid blocks must belong to the section or child bullet they explain. Use 2 spaces per list level so the structure remains foldable in Typora.
+- Never leave Takeaway prose, a framework figure, a formula, an experiment image, or a NOTE callout at the top level merely because the related section uses a list item.
 
 ### Takeaway
 
@@ -92,18 +111,21 @@ Use the main summary sections as second-level list items under the note topic, n
 ### Motivation
 
 - Start from the paper's actual goal, not from a list of related-work failures.
-- State the **core problem** as a missing capability: what can the target model or system not do today, and why does that matter?
+- State the **core problem** as an unresolved capability gap: what can the target model or system not do today, and why does that matter?
+- Phrase the core problem as a question or a limitation, not as the paper's intended solution. Do not describe an already achieved ability as the problem: `学习能表达多峰动作的策略` and `让未来状态反传指导策略` read as completed claims, not problem statements.
+- Apply the completed-outcome test: if the core-problem sentence can stand under the paper's result or contribution without change, it states the solution rather than the gap. Move the intended capability into `论文目标` and keep the problem focused on the missing capability and its constraint.
 - Explain why existing routes cannot provide that capability. Typical routes include imitation, offline RL, direct online interaction, additional supervision, or stronger models; choose only routes relevant to the paper.
 - State the **paper objective** as the framework or capability the work aims to build.
 - Keep this section to 3–4 concise bullets. The nature of the problem may require inference from the Introduction, experiments, and Conclusion; label interpretation when the paper does not state it verbatim.
 
 ### Core Mechanism
 - Identify the paper's central framework before listing implementation choices. State the capability it creates and the complete operating loop that makes that capability possible.
-- Present the central framework first. Then present supporting capabilities or designs as second-level mechanism points. The hierarchy should make clear what is the paper's core claim and what exists to make that claim work.
+- Present the central framework first, with its explanation, formula, and figure nested under one `核心框架：<Framework Name>` bullet. Then nest each supporting capability or module (for example V, M, and C) under a `支撑能力` bullet inside that framework. Never place module capabilities as peers of the core-framework bullet.
 - Use a named framework when the paper provides one. For a system paper, prefer Chinese labels such as `核心框架：<Framework Name>`, `支撑能力一：<Capability>`, and `支撑能力二：<Capability>` when this hierarchy is genuinely useful; do not force those exact labels onto a paper with another natural organization.
 - Do not reduce the section to a flat list of modules, losses, architecture names, or engineering tricks. Explain how each design enables the framework and why it is necessary.
 - Do not split points into `What`, `Why`, and `How` subsections.
-- Place each figure inside the mechanism point it explains. Use multiple figure callouts when a paper has several claim-bearing visuals, such as task setup, architecture, qualitative mechanism behavior, and training loop. Do not use a fixed one-figure limit.
+- Explain the mechanism of every framework module. Embed its original mechanism figure when one exists. When a module has no dedicated figure, use its governing formula or a precise textual explanation instead; do not create a NOTE merely to announce that no figure exists.
+- Place each figure inside the mechanism point it explains. Use multiple figures when they explain distinct mechanism points, such as architecture, qualitative behavior, and training loop. Do not use a fixed one-figure limit.
 - Put formulas immediately below the point they explain. Keep only formulas needed to understand the central mechanism or non-obvious objective.
 - Do not use `[[Vault Links]]` or other wiki links in mechanism labels.
 
@@ -116,46 +138,46 @@ Default structure:
 
     ![Framework](assets/NOTES.assets/framework.png)
 
-    > **<图中分区 1>**：说明该分区的作用及其在闭环中的位置。
-    >
-    > **<图中分区 2>**：说明另一分区的作用及两部分如何衔接。
-    >
-    > **为什么这是核心框架**：说明其余设计为何服务于该闭环，而不是并列贡献。
+    > [!NOTE]
+    > **Figure 1. <Original caption or concise overview>.** 说明图中各分区的作用、闭环的连接关系，以及其余设计为何服务于该闭环。
 
-  * **支撑能力一：<Capability Name>**：说明框架为何需要该能力，以及设计如何提供该能力。
-
-    ![Mechanism figure](assets/NOTES.assets/mechanism.png)
-
-    > **(a) 图中分区标题**：说明该分区呈现的机制。
-    >
-    > **(b) 图中分区标题**：说明其意义与证据边界。
-
-  * **支撑能力二：<Capability Name>**：说明另一项必要能力及其设计。
     $$
-    \text{Essential formula}
+    \text{Core framework objective}
     $$
 
-  * **<衔接或更新机制>**：说明前文组件如何转化为策略或系统更新。
+    说明公式如何定义框架闭环，并只定义理解所需的关键符号。
+
+    * **支撑能力一：<Capability Name>**：说明框架为何需要该能力，以及设计如何提供该能力。
+
+      ![Mechanism figure](assets/NOTES.assets/mechanism.png)
+
+      > [!NOTE]
+      > **Figure 2. <Original caption or concise overview>.** 说明该图呈现的机制、模块间信息流及其证据边界。
+
+    * **支撑能力二：<Capability Name with no dedicated figure>**：说明另一项必要能力及其设计。
+
+      $$
+      \text{Essential formula}
+      $$
+
+      说明该公式的输入、输出和机制作用。
 ```
 
-### Figure callouts
+### Figure and table callouts
 
-- Every substantial figure embedded in the note should be followed by a blockquote callout that explains its meaningful regions or panels, not merely its overall caption.
-- Start each callout item with a bold, concrete anchor such as `**上方 Rollout stage**`, `**左侧整体平台**`, `**右下 Box Closing**`, or `**(b) Failure Simulation**`.
-- Use `>` blockquotes for figure explanation so the image and interpretation remain visually associated.
+- Every embedded image or table must be immediately followed by exactly one `> [!NOTE]` callout at the same indentation level as the image. Do not use a generic `>` blockquote or put the note before the image.
+- The first content line of every NOTE must give an overview of what the image or table shows. Reuse the paper's original figure/table caption when possible; otherwise write a concise equivalent. For figures, follow it with a Chinese explanation of the meaningful regions or panels. For tables, follow it with the comparison, outcome, and necessary boundary.
+- Use concrete anchors such as `**上方 Rollout stage**`, `**左侧整体平台**`, `**(b) Failure Simulation**`, or `**M row**` for the Chinese explanation after the overview sentence.
 - Base the explanation on what the figure actually shows. Inspect the figure itself or its source PDF; do not infer panel positions from a caption alone.
 - Explain the figure's role in the paper's argument. When a panel is only qualitative, distinguish what it demonstrates from what it does not establish.
+- Keep a no-figure module explanation as normal prose, formula, or text. Do not add a NOTE that only says the paper has no separate mechanism figure.
 
 ### Experiment
 - Placed as an independent parallel list item (`* Experiment` or `- Experiment`), directly following `Core Mechanism`.
 - Indent prose or nested bullets under `* Experiment` with 2 spaces to maintain Typora list folding.
-- Use task or benchmark figures when they materially explain difficulty, coverage, or evaluation conditions. Place each figure under a concise explanation and provide a `>` panel-by-panel callout.
-- Include key comparison tables as local screenshots when the table itself is easier to inspect than a prose transcription. Crop only the table, preserving its caption, headers, all methods, and the proposed method's row.
-- Do not describe a table like a figure. For a table, write only:
-  - what experiment or comparison it performs;
-  - the overall result and the most important margin over the strongest relevant baseline;
-  - one essential boundary or anomaly when it changes interpretation.
-- Put the concise table conclusion before the table image. Do not add `>` callouts for tables.
+- Use task or benchmark figures when they materially explain difficulty, coverage, or evaluation conditions. Place each figure under its experiment item and follow it with a `> [!NOTE]` overview-and-explanation callout.
+- Include the principal result-table images as local screenshots. Crop only the table and caption, preserving headers, all methods needed for comparison, and the proposed method's row. Readable quantitative results must not exist only as prose.
+- Merge all discussion of the same experiment into one child bullet. State the setup and conclusion once under that bullet, then place its table image and single NOTE callout; do not create separate conclusion and table entries for the same experiment or repeat CarRacing, VizDoom, or another benchmark as duplicate experiments.
 - Summarize ablations by the causal design driver and measured effect, not by reproducing every number.
 
 ### Pipeline
@@ -183,11 +205,14 @@ Default structure:
 ### Critical Thinking
 - Merge `Pros`, `Cons`, and deep critical evaluation into a single unified `* Critical Thinking` (or `- Critical Thinking`) section.
 - Indent all sub-points under `* Critical Thinking` with 2 spaces to maintain Typora list folding.
+- Do not recap experiment results already stated in `Experiment`. Discuss strengths, failure modes, trade-offs, evidence boundaries, and future directions instead.
 - Analyze the paper across the following five dimensions using high-density, technically rigorous bullets:
 
   1. **Pros**:
-     - Concrete strengths and verified contributions only (2–3 concise bullets).
-     - Focus on proven performance improvements, architectural elegance, or theoretical breakthroughs.
+     - Concrete architectural or conceptual strengths only (2–3 concise bullets).
+     - Do not repeat benchmark results, quantitative margins, or claims already stated in `Experiment`.
+     - State the contribution boundary when the paper contrasts with neighboring work. A milestone contribution may be a novel combination or a scalable demonstration rather than a world-first mechanism; do not turn priority nuance into an unsupported novelty claim.
+     - Add a `**Paradigm Demonstration**` bullet only for a milestone paper with verified evidence that later work adopted its core framework, problem formulation, or training loop as a reusable research direction. Explain the demonstrated paradigm and cite the concrete later work; do not infer paradigm status from novelty, popularity, or citation count alone. Omit this bullet for ordinary papers.
 
   2. **Cons**:
      - Do NOT write vague generic complaints (such as "hyperparameters are difficult to tune" or "discrete only").
@@ -205,6 +230,7 @@ Default structure:
        - Are baselines fair, representative, and properly tuned?
        - Does the evaluation benchmark realistically reflect the target problem, or is it tested on cherry-picked / synthetic setups?
        - Do ablation studies isolate the true causal drivers, or are performance gains overstated?
+       - Assess evidence coverage, fairness, causal isolation, and boundary conditions. Do not restate the experiment outcomes.
 
   5. **Future Directions**:
      - **How can research go further along this direction?**
@@ -218,6 +244,7 @@ Default structure:
     * **Pros**:
       * [优势要点 1]
       * [优势要点 2]
+      * **Paradigm Demonstration**：[仅里程碑论文保留；说明论文示范的范式，以及后续采用该范式的具体工作]
     * **Cons**:
       * **[劣势/失效要点 1]**：说明特定病态场景、理论假设破裂或性能断崖条件。
       * **[劣势/失效要点 2]**：说明维度扩展瓶颈或非理想物理约束下的退化机制。
@@ -237,11 +264,13 @@ Default structure:
 
 ## Citation style
 
-Prefer this citation format for new entries:
+Every summarized paper's metadata line must start with the full paper title in bold. Then give authors, venue, year, stable links, and the citation count. Never make the author list the first field or replace the title with a shorthand:
 
 ```markdown
-- **Paper Title**. Author1 Author2 et.al. **Venue**, **Year**, ([link](URL)).
+**World Models**. David Ha, Jürgen Schmidhuber. **arXiv**, **2018**. [(Paper)](URL) [(Project)](URL) (Citations __N__)
 ```
+
+Use the exact published title, preserving capitalization and punctuation. The complete title line above takes precedence over nearby notes that begin with authors.
 
 Always append a citation count field for every summarized paper entry. The preferred local style is:
 
@@ -414,6 +443,18 @@ Default fetching rule:
 
 Only keep formulas that are essential to understanding the paper.
 
+Math delimiters are mandatory:
+
+- Use inline math with `$...$` everywhere in prose.
+- Put display math on its own lines between `$$` delimiters:
+  ```markdown
+  $$
+  L = L_{\mathrm{task}} + \lambda L_{\mathrm{reg}}
+  $$
+  ```
+- Never use LaTeX backslash-parenthesis or backslash-bracket delimiters for math, including inside summaries, explanations, or prose copied from another source.
+- Use standard LaTeX commands such as `\boldsymbol{...}` and `\mathbf{...}`; do not use custom `\b`-prefixed macros.
+
 Eligible formulas usually include:
 
 - the core objective function
@@ -445,21 +486,22 @@ When copying a figure:
 - embed it with a relative markdown path
 - extract the figure from the current paper's source or PDF; do not reuse a similarly named image from another note or an existing assets directory without checking that it depicts the same paper and the same claim
 - place it under the mechanism point it explains
-- follow it with a `>` callout covering the meaningful panels or regions
+- immediately follow it with exactly one `> [!NOTE]` whose first content line gives the figure overview and whose Chinese explanation covers the meaningful panels or regions
 - inspect the rendered figure or its source PDF before writing panel labels
 
 When capturing a table:
 
 - crop only the table and its caption, without unrelated body text
 - preserve all rows and columns needed to verify the claim
-- place the concise purpose-and-result sentence before the image
-- do not use `>` panel callouts for a table
+- put setup and conclusion inside the table's single experiment bullet, then embed the principal table image
+- immediately follow the image with exactly one `> [!NOTE]`; its first content line gives the table overview, followed by the comparison, outcome, and any essential boundary
+- do not add an extra table-conclusion bullet or describe table cells as visual panels
 
 When copying a formula:
 
 - preserve LaTeX faithfully
-- use block math for important equations: `$$...$$`
-- use inline math only for short symbols in prose
+- use `$...$` for inline math and standalone `$$` blocks for important equations
+- never use LaTeX backslash-parenthesis or backslash-bracket delimiters
 - after each important formula, add a short explanation of what it means
 - define only the non-obvious symbols, not every symbol mechanically
 
@@ -499,10 +541,14 @@ After completing the summary, reread the entire note once as a compact review no
 - Remove repeated statements between `Takeaway`, `Motivation`, `Core Mechanism`, and `Pipeline`.
 - Keep only problems, frameworks, mechanisms, formulas, figures, tables, and critical thinking points that materially improve understanding.
 - Check that `Takeaway` is strictly English and uses either a plain-text compositional formula or one or two sentences, with no code ticks, quotes, wrapping, or `Lineage` section.
-- Check that `Motivation` states the missing capability and paper objective, not just prior-work defects.
-- Check that `Core Mechanism` starts with the central framework and clearly subordinates implementation designs.
+- Check that `Motivation` states the unresolved capability gap and paper objective, not just prior-work defects or the paper's achieved result.
+- Check that the core-problem sentence does not read as a completed claim. Move an intended ability into the paper objective when removing it makes the problem statement still valid.
+- Check that `Core Mechanism` starts with the central framework, nests its figure/formula below it, and puts supporting modules under `支撑能力` rather than as peer items.
 - Check that `Pipeline` is a clean Mermaid flowchart with no `>` callouts or explanatory prose.
-- Check that each figure has a panel-level `>` explanation and each table has only a concise purpose-and-result explanation.
+- Check that every framework module has a mechanism explanation and an original figure or formula/text where a figure is unavailable.
+- Check that each image/table is immediately followed by exactly one `> [!NOTE]`, with an overview first and no orphan no-figure NOTES.
+- Check that the same experiment appears once, the principal result tables are embedded, and `Critical Thinking` does not recap experiment results.
+- Check that inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains.
 - Remove unsupported details, unnecessary notation, long derivations, and low-value background.
 - Confirm that the note remains understandable without the figures or auxiliary sources.
 
@@ -549,13 +595,19 @@ Before finishing, verify:
 
 - a final conciseness review was completed after drafting
 - the number of figures and formulas follows explanatory need, with no redundant items
-- every kept figure has a clear explanatory purpose
-- every embedded figure has a panel-level `>` explanation
-- every embedded result table has a concise purpose-and-result sentence before it
+- every kept figure or table has a clear explanatory purpose and an immediately following `> [!NOTE]`
+- the first content line of each NOTE gives an overview and reuses the original paper caption where practical
+- every embedded figure has a panel-level Chinese explanation after its overview
+- every embedded result table has one NOTE covering comparison, outcome, and essential boundary
+- the principal result-table image is embedded and readable, not only summarized in prose
+- each framework module has a mechanism explanation; missing dedicated figures are covered by formulas or text, not empty NOTES
 - every kept formula supports the mechanism directly
 - all assets are saved locally with relative paths
-- formulas sit under the relevant mechanism or pipeline points by default
+- formulas sit under the relevant mechanism points, nested beneath the owning list item
+- inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains
 - all distinct claim-bearing figures and tables that materially improve the note are represented
+- the same experiment is not split into duplicate entries or repeated across benchmarks
+- `Critical Thinking` does not restate experiment outcomes
 - `Pipeline` contains only its Mermaid diagram
 - the prose summary still stands on its own without the raw paper
 
@@ -572,14 +624,16 @@ Match the repository's existing local asset pattern.
 
 1. Read the target markdown note and extract the paper link.
 2. Inspect nearby notes in the same directory for stable formatting conventions; preserve user-specific formatting choices unless the user asks to change them.
-3. Verify citation metadata and citation count from the supplied paper page and reliable bibliographic sources, then inject them into the note entry.
+3. Verify citation metadata and citation count from the supplied paper page and reliable bibliographic sources, then write a metadata line that starts with the full paper title in bold, followed by authors, venue, year, links, and citation count.
 4. Verify and write a citation count for every summarized paper entry as `(Citations __N__)`; if no count can be verified after reasonable fallbacks, write `(Citations __unknown__)` and report the attempted sources.
 5. Infer the missing capability and paper objective, then state the central framework before its supporting designs.
-6. Summarize the paper in Chinese-dominant mixed-language style with an English-only `Takeaway`, following the default section order unless stable nearby conventions require an adaptation.
-7. Preserve the paper's most important formulas and place them directly under the relevant mechanism points.
-8. Save and embed claim-bearing figures and table crops locally into the matching `assets/<note>.assets/` folder when the source is usable.
-9. Explain every embedded figure region by region with `>` callouts and every result table concisely by purpose and outcome.
-10. Reread the completed note for insight hierarchy, unsupported claims, redundancy, and formatting compliance.
+6. Put the framework figure and formula under `核心框架` and nest every module capability under `支撑能力`; explain each module with a figure, formula, or precise text.
+7. Summarize the paper in Chinese-dominant mixed-language style with an English-only `Takeaway`, indenting every image, formula, NOTE, and Mermaid block under its owning list item.
+8. Preserve the paper's most important formulas with `$...$` inline math and standalone `$$` display blocks directly under the relevant mechanism points.
+9. Save and embed claim-bearing mechanism figures and the principal result-table images locally into the matching `assets/<note>.assets/` folder when the source is usable.
+10. Immediately follow every image or table with exactly one `> [!NOTE]`; start with an overview, then give the figure or table explanation without duplicating experiments.
+11. For a milestone paper only, add `Paradigm Demonstration` under `Critical Thinking` after verifying that later work adopted its framework, problem formulation, or training loop; omit it when that evidence is absent.
+12. Reread the completed note, run the completion validation below, and inspect the title, images, formulas, and tables in Typora.
 
 ## Must not do
 
@@ -590,17 +644,42 @@ Match the repository's existing local asset pattern.
 - Do not use `[[Vault Links]]`, wiki links, or other concept-link syntax
 - Do not include a `System Model & Assumptions` subsection
 - Do not dump the whole abstract or whole paper into the note
+- Do not begin the metadata line with an author list or omit the full bold paper title
 - Do not include formulas that are not central to the method
+- Do not use LaTeX backslash-parenthesis or backslash-bracket delimiters for math
 - Do not move key formulas into a detached section when they belong under a specific mechanism point
 - Do not include decorative or redundant figures
+- Do not leave a framework figure, formula, NOTE, or Mermaid block outside its owning list hierarchy
+- Do not omit a module's mechanism explanation or add a NOTE only to say no dedicated figure exists
 - Do not stop at prose-only `Figure Note` entries when a useful figure or table can be saved locally
-- Do not describe a table with panel-level callouts; keep table discussion to experiment purpose and outcome
+- Do not embed an image or table without its immediately following NOTE
+- Do not split one experiment into duplicate conclusion/table entries or repeat the same benchmark as separate experiments
+- Do not recap experiment results in `Critical Thinking`
+- Do not label an ordinary paper as a paradigm or add `Paradigm Demonstration` based only on novelty, popularity, or citation count
+- Do not present a field-changing claim without a verified concrete successor or adoption example
 - Do not add `>` callouts, prose, or numbered notes under `Pipeline`
 - Do not let Semantic Scholar or a blog override the paper
 - Do not hotlink random images if a stable local copy can be saved
 - Do not break existing relative paths or nearby note conventions
 - Do not rewrite or remove existing frontmatter, title, TOC, or unrelated note scaffolding without a task-specific reason
 - Do not overwrite unrelated note content
+
+## Completion validation
+
+Do not report completion until all checks pass:
+
+1. The metadata line begins with the exact full title in bold and includes authors, venue, year, verified links, and the citation field.
+2. The core problem states an unresolved capability gap, names its relevant constraints, and passes the completed-outcome test; the proposed capability appears in the paper objective or mechanism instead.
+3. Any novelty or priority claim names its scope and is supported by the paper or verified later work; do not claim a broader first than the evidence allows.
+4. `Core Mechanism` nests the framework figure/formula and `支撑能力` modules correctly; no module is a peer of `核心框架`.
+5. Every framework module has a mechanism explanation, and no empty no-figure NOTE exists.
+6. Every image and table is immediately followed by exactly one correctly indented `> [!NOTE]`, with an overview as its first content line.
+7. Every local asset path resolves to an existing file under the paper's `assets/` directory.
+8. The principal result-table images are present; each experiment appears once and is not duplicated.
+9. Inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains.
+10. `Critical Thinking` contains no recap of experiment results.
+11. `Paradigm Demonstration` appears only for a verified milestone paper and names concrete later work that adopted the paradigm; ordinary papers omit it.
+12. Open the completed note in Typora and visibly confirm that the full title, images, NOTE callouts, inline/display formulas, and result tables render correctly and remain nested under their sections.
 
 ## Final grounding rule
 
