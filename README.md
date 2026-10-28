@@ -45,7 +45,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 2. `Motivation`：研究问题、现有路线为何不足，以及论文目标。
 3. `Core Mechanism`：先讲核心框架，再讲支撑机制、公式和对应图表。
 4. `Experiment`：关键实验、主要结论，以及能支撑论点的表格或图片。
-5. `Pipeline`：Mermaid 端到端流程图。
+5. `Pipeline`：Mermaid 核心机制与决策流程图；默认横向布局，区分论文已评估内容与明确的未来集成范围。
 6. `Critical Thinking`：优势、具体失效条件、权衡、实验支撑和后续方向。
 
 笔记还会包含经过核验的论文元数据和引用数；无法核验引用数时，会明确标记 `(Citations __unknown__)`。论文中的图片会按需保存为本地资源，并在对应解释下方引用。

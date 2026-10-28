@@ -79,9 +79,10 @@ Use the main summary sections as second-level list items under the note topic, n
 
   ```mermaid
   flowchart LR
-      Input[Input] --> Model[Core model]
-      Model --> Update[Training or feedback]
-      Update --> Output[Output]
+      Input[Input] --> Model[Core predictor]
+      Model --> Gate{Confidence threshold met?}
+      Gate -->|Accepted| Output[Return prediction]
+      Gate -->|Fallback| Review[Route to human]
   ```
 
 * Critical Thinking
@@ -182,23 +183,36 @@ Default structure:
 
 ### Pipeline
 - **Use Mermaid flowchart instead of text lists**: Do NOT write a verbose `1. 2. 3.` numbered text list.
-- Present the end-to-end operational process primarily as a clean, compact Mermaid diagram (`flowchart TD` or `flowchart LR`).
-- Diagram covers the full lifecycle: Input/Observation -> Model/Decision -> Buffer/Feedback -> Loss/Update -> Target Sync.
-- Keep Mermaid node text concise and ASCII/simple Chinese (avoid special punctuation inside node shapes to ensure rendering stability).
+- Diagram the paper's actual core mechanism and decision path, not an idealized full system lifecycle. Include a training loop, feedback path, or deployment layer only when the paper implements or evaluates it.
+- Default to `flowchart LR` for a long main path so the diagram stays wide and readable in Typora. Use `flowchart TD` when the process is genuinely hierarchical or has many vertical decisions.
+- Keep the graph within roughly 16 nodes. Merge implementation details that do not change the reader's understanding of the main mechanism; split a complex system into a second diagram rather than crowding the Pipeline.
+- Use action-oriented, specific labels. Every decision node needs named branch conditions such as `Accepted` and `Fallback`, not generic `Yes` and `No` when the meaning can be stated directly.
+- Group nodes by responsibility or evidence boundary with at most two nested subgraph levels. Use a small NOTE legend when one diagram combines the paper's evaluated method with explicitly labeled future integration; do not let a simple diagram accumulate explanatory prose.
+- Keep Mermaid node text concise and ASCII/simple Chinese. Quote node text containing `|`, brackets, parentheses, or other punctuation that Mermaid may reserve; use `<br/>` for intentional line breaks.
+- Distinguish data-derived thresholds or calibration regions from per-request runtime checks. A decision node should test the request-level score or membership in the precomputed region, not recompute dataset-wide FPR/FNR for each request.
+- Do not invent training, feedback, retraining, graph updates, or enforcement modules merely to make the lifecycle look complete. If the paper does not implement them, omit them or place them in a clearly labeled future-scope subgraph.
+- Use high-contrast node classes with explicit `color:` values. Consistent color semantics should distinguish ordinary processing, decisions, inputs/outputs, and future scope; color is supplemental, not the only way to communicate meaning.
+- Include an `accTitle` and a concise `accDescr`, especially for diagrams that mix evaluated and proposed components.
 - Must be indented under the parent `* Pipeline` (or `- Pipeline`) list item with 2 spaces so it folds properly in Typora.
-- Do not add `>` callouts, prose notes, numbered lists, or explanatory paragraphs around or below the diagram. Put required context into the mechanism section or concise Mermaid nodes.
+- A single compact `> [!NOTE]` legend is allowed immediately after the diagram when it prevents scope or threshold ambiguity. Do not add numbered steps or repeat the mechanism narrative around the diagram.
+- Validate the Mermaid syntax by rendering it before completion. Also inspect its aspect ratio and node/edge layout when a renderer is available; a valid but excessively tall or sparse diagram is not finished.
 - Example:
   ```markdown
   * Pipeline
 
     ```mermaid
     flowchart LR
-        Obs[Local Obs] --> Net[Agent Net]
-        Net --> Act[Action Selection]
-        Act --> Env[Environment]
-        Env --> Buf[(Replay Buffer)]
-        Buf --> Loss[TD Loss & Target]
-        Loss --> Update[Parameter Update]
+        Input[Observe request] --> Model[Core predictor]
+        Model --> Gate{Confidence threshold met?}
+        Gate -->|Accepted| Result[Return prediction]
+        Gate -->|Fallback| Review[Route to human]
+
+        classDef process fill:#EAF2F8,stroke:#1F618D,stroke-width:2px,color:#102A43
+        classDef decision fill:#FFF2CC,stroke:#A16207,stroke-width:2px,color:#3F2A00
+        classDef future fill:#FCE8E6,stroke:#C5221F,stroke-width:2px,color:#5F1A17
+        class Input,Model process
+        class Gate decision
+        class Review future
     ```
   ```
 
@@ -544,7 +558,7 @@ After completing the summary, reread the entire note once as a compact review no
 - Check that `Motivation` states the unresolved capability gap and paper objective, not just prior-work defects or the paper's achieved result.
 - Check that the core-problem sentence does not read as a completed claim. Move an intended ability into the paper objective when removing it makes the problem statement still valid.
 - Check that `Core Mechanism` starts with the central framework, nests its figure/formula below it, and puts supporting modules under `支撑能力` rather than as peer items.
-- Check that `Pipeline` is a clean Mermaid flowchart with no `>` callouts or explanatory prose.
+- Check that `Pipeline` describes the paper's actual mechanism, keeps a readable LR main path where appropriate, and does not imply unevaluated modules were implemented or validated.
 - Check that every framework module has a mechanism explanation and an original figure or formula/text where a figure is unavailable.
 - Check that each image/table is immediately followed by exactly one `> [!NOTE]`, with an overview first and no orphan no-figure NOTES.
 - Check that the same experiment appears once, the principal result tables are embedded, and `Critical Thinking` does not recap experiment results.
@@ -608,7 +622,7 @@ Before finishing, verify:
 - all distinct claim-bearing figures and tables that materially improve the note are represented
 - the same experiment is not split into duplicate entries or repeated across benchmarks
 - `Critical Thinking` does not restate experiment outcomes
-- `Pipeline` contains only its Mermaid diagram
+- `Pipeline` is a validated Mermaid diagram with specific actions and named branches; any immediately following NOTE is a compact scope legend rather than repeated prose
 - the prose summary still stands on its own without the raw paper
 
 ## Required asset placement
@@ -657,7 +671,7 @@ Match the repository's existing local asset pattern.
 - Do not recap experiment results in `Critical Thinking`
 - Do not label an ordinary paper as a paradigm or add `Paradigm Demonstration` based only on novelty, popularity, or citation count
 - Do not present a field-changing claim without a verified concrete successor or adoption example
-- Do not add `>` callouts, prose, or numbered notes under `Pipeline`
+- Do not add numbered steps or extended prose under `Pipeline`; one compact NOTE legend is allowed when it resolves a real scope or threshold ambiguity
 - Do not let Semantic Scholar or a blog override the paper
 - Do not hotlink random images if a stable local copy can be saved
 - Do not break existing relative paths or nearby note conventions
@@ -679,7 +693,7 @@ Do not report completion until all checks pass:
 9. Inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains.
 10. `Critical Thinking` contains no recap of experiment results.
 11. `Paradigm Demonstration` appears only for a verified milestone paper and names concrete later work that adopted the paradigm; ordinary papers omit it.
-12. Open the completed note in Typora and visibly confirm that the full title, images, NOTE callouts, inline/display formulas, and result tables render correctly and remain nested under their sections.
+12. Render the Pipeline Mermaid source successfully and inspect its composition, then open the completed note in Typora and visibly confirm that the full title, images, NOTE callouts, inline/display formulas, result tables, and Mermaid diagram render correctly and remain nested under their sections.
 
 ## Final grounding rule
 
