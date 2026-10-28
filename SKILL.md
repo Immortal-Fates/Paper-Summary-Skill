@@ -100,6 +100,7 @@ Use the main summary sections as second-level list items under the note topic, n
 
 * Critical Thinking
 
+  * **Contribution**: One-sentence judgment of the paper's primary value: a new challenge, a new solution, or a new research paradigm.
   * **Pros**: Architectural strengths that are not a recap of experiment results.
   * **Cons**: Concrete failure modes and broken assumptions.
   * **Trade-offs**: What the design sacrifices and whether that cost is justified.
@@ -236,34 +237,39 @@ Default structure:
 ### Critical Thinking
 - Merge `Pros`, `Cons`, and deep critical evaluation into a single unified `* Critical Thinking` (or `- Critical Thinking`) section.
 - Indent all sub-points under `* Critical Thinking` with 2 spaces to maintain Typora list folding.
+- Start with a one-sentence `**Contribution**` item before `Pros`. Classify the paper's primary value as a new challenge or problem formulation, a new solution or method, or a new research paradigm or direction. State the contribution at the scope the paper actually establishes; use wording such as "proposes and preliminarily validates" when the work opens a direction without delivering a complete system. If the user supplies a contribution judgment, preserve its intent and check it against the paper.
 - Do not recap experiment results already stated in `Experiment`. Discuss strengths, failure modes, trade-offs, evidence boundaries, and future directions instead.
-- Analyze the paper across the following five dimensions using high-density, technically rigorous bullets:
+- Analyze the paper across the following six dimensions using high-density, technically rigorous bullets:
 
-  1. **Pros**:
+  1. **Contribution**:
+     - Write exactly one sentence that identifies the paper's primary value and why: a new challenge, a new solution, or a new research paradigm or direction.
+     - Do not turn this into a list of all contributions, repeat the Takeaway, or claim completeness beyond the paper's evidence.
+
+  2. **Pros**:
      - Concrete architectural or conceptual strengths only (2–3 concise bullets).
      - Do not repeat benchmark results, quantitative margins, or claims already stated in `Experiment`.
      - State the contribution boundary when the paper contrasts with neighboring work. A milestone contribution may be a novel combination or a scalable demonstration rather than a world-first mechanism; do not turn priority nuance into an unsupported novelty claim.
      - Add a `**Paradigm Demonstration**` bullet only for a milestone paper with verified evidence that later work adopted its core framework, problem formulation, or training loop as a reusable research direction. Explain the demonstrated paradigm and cite the concrete later work; do not infer paradigm status from novelty, popularity, or citation count alone. Omit this bullet for ordinary papers.
 
-  2. **Cons**:
+  3. **Cons**:
      - Do NOT write vague generic complaints (such as "hyperparameters are difficult to tune" or "discrete only").
      - Focus on concrete failure modes, breakdown conditions, and adversarial settings (2–3 precise, technically rigorous bullets):
        - What theoretical assumptions break down under non-ideal settings?
        - In what specific pathological scenarios, reward structures, or physical conditions does the algorithm fail or suffer severe degradation (e.g. relative overgeneralization in climbing games, bootstrap divergence, synchronization lag, topological fragmentation)?
 
-  3. **Trade-offs**:
+  4. **Trade-offs**:
      - **What are the trade-offs made? Are the trade-offs made meaningful?**
        - Explicitly identify what the method sacrifices to gain its advantages (e.g., trading inference latency/memory/sample complexity for accuracy; trading decentralized autonomy for central coordination).
        - Critically assess whether these trade-offs are practically meaningful and worthwhile, or merely paper-driven compromises shifting the burden elsewhere.
 
-  4. **Empirical Support**:
+  5. **Empirical Support**:
      - **Do experiments properly support the claims?**
        - Are baselines fair, representative, and properly tuned?
        - Does the evaluation benchmark realistically reflect the target problem, or is it tested on cherry-picked / synthetic setups?
        - Do ablation studies isolate the true causal drivers, or are performance gains overstated?
        - Assess evidence coverage, fairness, causal isolation, and boundary conditions. Do not restate the experiment outcomes.
 
-  5. **Future Directions**:
+  6. **Future Directions**:
      - **How can research go further along this direction?**
        - What is the logical next bottleneck to tackle?
        - How can future work relax restrictive assumptions, address primary failure modes, or advance this paradigm towards real-world application?
@@ -272,6 +278,7 @@ Default structure:
   ```markdown
   * Critical Thinking
 
+    * **Contribution**：[一句话判断论文主要价值属于新 challenge、新 solution 或新 research paradigm，并与论文证据范围一致]
     * **Pros**:
       * [优势要点 1]
       * [优势要点 2]
@@ -580,6 +587,7 @@ After completing the summary, reread the entire note once as a compact review no
 - Check that every framework module has a mechanism explanation and an original figure or formula/text where a figure is unavailable.
 - Check that each image/table is immediately followed by exactly one `> [!NOTE]`, with an overview first and no orphan no-figure NOTES.
 - Check that the same experiment appears once, the principal result tables are embedded, and `Critical Thinking` does not recap experiment results.
+- Check that `Critical Thinking` begins with exactly one `Contribution` sentence that distinguishes a new challenge, new solution, or new research direction at the paper's demonstrated scope.
 - Check that inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains.
 - Remove unsupported details, unnecessary notation, long derivations, and low-value background.
 - Confirm that the note remains understandable without the figures or auxiliary sources.
@@ -640,6 +648,7 @@ Before finishing, verify:
 - all distinct claim-bearing figures and tables that materially improve the note are represented
 - the same experiment is not split into duplicate entries or repeated across benchmarks
 - `Critical Thinking` does not restate experiment outcomes
+- `Critical Thinking` starts with one evidence-scoped `Contribution` sentence before `Pros`
 - `Experiment` begins with a render-validated research-logic overview that explains how study findings motivate model evaluation and boundary analysis
 - `Pipeline` is a validated Mermaid diagram with specific actions and named branches; any immediately following NOTE is a compact scope legend rather than repeated prose
 - the prose summary still stands on its own without the raw paper
@@ -667,7 +676,8 @@ Match the repository's existing local asset pattern.
 10. Save and embed claim-bearing mechanism figures and the principal result-table images locally into the matching `assets/<note>.assets/` folder when the source is usable.
 11. Immediately follow every image or table with exactly one `> [!NOTE]`; start with an overview, then give the figure or table explanation without duplicating experiments.
 12. For a milestone paper only, add `Paradigm Demonstration` under `Critical Thinking` after verifying that later work adopted its framework, problem formulation, or training loop; omit it when that evidence is absent.
-13. Reread the completed note, run the completion validation below, and inspect the title, images, formulas, tables, and both Mermaid diagrams in Typora.
+13. Begin `Critical Thinking` with a one-sentence `Contribution` judgment that classifies the primary value as a new challenge, new solution, or new research paradigm within the paper's demonstrated scope.
+14. Reread the completed note, run the completion validation below, and inspect the title, images, formulas, tables, and both Mermaid diagrams in Typora.
 
 ## Must not do
 
@@ -689,6 +699,7 @@ Match the repository's existing local asset pattern.
 - Do not embed an image or table without its immediately following NOTE
 - Do not split one experiment into duplicate conclusion/table entries or repeat the same benchmark as separate experiments
 - Do not recap experiment results in `Critical Thinking`
+- Do not turn `Contribution` into a list, a second Takeaway, or an unsupported completeness claim
 - Do not label an ordinary paper as a paradigm or add `Paradigm Demonstration` based only on novelty, popularity, or citation count
 - Do not present a field-changing claim without a verified concrete successor or adoption example
 - Do not add numbered steps or extended prose under `Pipeline`; one compact NOTE legend is allowed when it resolves a real scope or threshold ambiguity
@@ -712,7 +723,7 @@ Do not report completion until all checks pass:
 8. The principal result-table images are present; each experiment appears once and is not duplicated.
 9. `Experiment` opens with a research-logic Mermaid overview grounded in actual experiments; it explains why the evidence chain is coherent without replacing result evidence.
 10. Inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains.
-11. `Critical Thinking` contains no recap of experiment results.
+11. `Critical Thinking` begins with exactly one `Contribution` sentence before `Pros`, and contains no recap of experiment results.
 12. `Paradigm Demonstration` appears only for a verified milestone paper and names concrete later work that adopted the paradigm; ordinary papers omit it.
 13. Render both the Experiment research-logic overview and Pipeline Mermaid source successfully and inspect their composition, then open the completed note in Typora and visibly confirm that the full title, images, NOTE callouts, inline/display formulas, result tables, and both diagrams render correctly and remain nested under their sections.
 
