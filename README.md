@@ -44,7 +44,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 1. `Takeaway`：仅使用英文，概括核心方法或贡献。
 2. `Motivation`：研究问题、现有路线为何不足，以及论文目标。
 3. `Core Mechanism`：先讲核心框架，再讲支撑机制、公式和对应图表。
-4. `Experiment`：关键实验、主要结论，以及能支撑论点的表格或图片。
+4. `Experiment`：先用 Mermaid 研究逻辑图串联问题发现、可学习性、模型预测与解释分析，再给出关键实验、主要结论及支撑图表。
 5. `Pipeline`：Mermaid 核心机制与决策流程图；默认横向布局，区分论文已评估内容与明确的未来集成范围。
 6. `Critical Thinking`：优势、具体失效条件、权衡、实验支撑和后续方向。
 

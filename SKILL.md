@@ -68,6 +68,19 @@ Use the main summary sections as second-level list items under the note topic, n
 
 * Experiment
 
+  ```mermaid
+  flowchart LR
+      Problem["What failure occurs?<br/>Observed behavior and context"]
+      Learn["Is preference learnable?<br/>Consistency and similarity"]
+      Predict["Can the model predict it?<br/>Comparison and coverage"]
+      Explain["Why does it fail?<br/>Stratified error analysis"]
+
+      Problem -->|"Defines target behavior"| Learn
+      Learn -->|"Motivates model signals"| Predict
+      Predict -->|"Explains performance limits"| Explain
+      Explain -.->|"Revises assumptions"| Learn
+  ```
+
   * **<Experiment or benchmark name>**：Combine the setup and conclusion for this experiment in one entry.
 
     ![Principal result table](assets/NOTES.assets/main-results.png)
@@ -176,6 +189,10 @@ Default structure:
 ### Experiment
 - Placed as an independent parallel list item (`* Experiment` or `- Experiment`), directly following `Core Mechanism`.
 - Indent prose or nested bullets under `* Experiment` with 2 spaces to maintain Typora list folding.
+- Start `Experiment` with a compact Mermaid research-logic overview that connects the study design into one evidence chain, such as: observed problem or failure mode -> whether the target behavior is learnable -> whether a model can predict it -> which analyses explain its behavior and boundaries. Derive the nodes from the paper's actual experiments; do not add stages merely to make the chain symmetrical.
+- The overview answers research-design questions, not reported benchmark numbers. Each node should name the question, the experiment or evidence type used to answer it, and the key construct observed. Use explicit edge labels to show how one answer licenses the next experiment; a dashed return edge may show boundary analysis feeding back into a hypothesis.
+- Place the overview directly under `Experiment`, before individual experiment bullets. Keep it visually concise, using one grouped node per major research stage rather than one node per figure. Do not repeat the diagram in prose or label nodes with figure ranges.
+- The research-logic overview does not replace result figures, tables, ablations, or the final `Pipeline`: it explains why the experiments form a coherent study, while result evidence supports individual claims and `Pipeline` explains the method's operating path.
 - Use task or benchmark figures when they materially explain difficulty, coverage, or evaluation conditions. Place each figure under its experiment item and follow it with a `> [!NOTE]` overview-and-explanation callout.
 - Include the principal result-table images as local screenshots. Crop only the table and caption, preserving headers, all methods needed for comparison, and the proposed method's row. Readable quantitative results must not exist only as prose.
 - Merge all discussion of the same experiment into one child bullet. State the setup and conclusion once under that bullet, then place its table image and single NOTE callout; do not create separate conclusion and table entries for the same experiment or repeat CarRacing, VizDoom, or another benchmark as duplicate experiments.
@@ -558,6 +575,7 @@ After completing the summary, reread the entire note once as a compact review no
 - Check that `Motivation` states the unresolved capability gap and paper objective, not just prior-work defects or the paper's achieved result.
 - Check that the core-problem sentence does not read as a completed claim. Move an intended ability into the paper objective when removing it makes the problem statement still valid.
 - Check that `Core Mechanism` starts with the central framework, nests its figure/formula below it, and puts supporting modules under `支撑能力` rather than as peer items.
+- Check that `Experiment` opens with a compact research-logic Mermaid overview grounded in the paper's actual experiments, without duplicating individual result figures or inventing stages.
 - Check that `Pipeline` describes the paper's actual mechanism, keeps a readable LR main path where appropriate, and does not imply unevaluated modules were implemented or validated.
 - Check that every framework module has a mechanism explanation and an original figure or formula/text where a figure is unavailable.
 - Check that each image/table is immediately followed by exactly one `> [!NOTE]`, with an overview first and no orphan no-figure NOTES.
@@ -622,6 +640,7 @@ Before finishing, verify:
 - all distinct claim-bearing figures and tables that materially improve the note are represented
 - the same experiment is not split into duplicate entries or repeated across benchmarks
 - `Critical Thinking` does not restate experiment outcomes
+- `Experiment` begins with a render-validated research-logic overview that explains how study findings motivate model evaluation and boundary analysis
 - `Pipeline` is a validated Mermaid diagram with specific actions and named branches; any immediately following NOTE is a compact scope legend rather than repeated prose
 - the prose summary still stands on its own without the raw paper
 
@@ -644,10 +663,11 @@ Match the repository's existing local asset pattern.
 6. Put the framework figure and formula under `核心框架` and nest every module capability under `支撑能力`; explain each module with a figure, formula, or precise text.
 7. Summarize the paper in Chinese-dominant mixed-language style with an English-only `Takeaway`, indenting every image, formula, NOTE, and Mermaid block under its owning list item.
 8. Preserve the paper's most important formulas with `$...$` inline math and standalone `$$` display blocks directly under the relevant mechanism points.
-9. Save and embed claim-bearing mechanism figures and the principal result-table images locally into the matching `assets/<note>.assets/` folder when the source is usable.
-10. Immediately follow every image or table with exactly one `> [!NOTE]`; start with an overview, then give the figure or table explanation without duplicating experiments.
-11. For a milestone paper only, add `Paradigm Demonstration` under `Critical Thinking` after verifying that later work adopted its framework, problem formulation, or training loop; omit it when that evidence is absent.
-12. Reread the completed note, run the completion validation below, and inspect the title, images, formulas, and tables in Typora.
+9. Open `Experiment` with a compact Mermaid research-logic overview that connects the observed problem, learnability, model evidence, and explanatory analysis using the paper's actual study design.
+10. Save and embed claim-bearing mechanism figures and the principal result-table images locally into the matching `assets/<note>.assets/` folder when the source is usable.
+11. Immediately follow every image or table with exactly one `> [!NOTE]`; start with an overview, then give the figure or table explanation without duplicating experiments.
+12. For a milestone paper only, add `Paradigm Demonstration` under `Critical Thinking` after verifying that later work adopted its framework, problem formulation, or training loop; omit it when that evidence is absent.
+13. Reread the completed note, run the completion validation below, and inspect the title, images, formulas, tables, and both Mermaid diagrams in Typora.
 
 ## Must not do
 
@@ -690,10 +710,11 @@ Do not report completion until all checks pass:
 6. Every image and table is immediately followed by exactly one correctly indented `> [!NOTE]`, with an overview as its first content line.
 7. Every local asset path resolves to an existing file under the paper's `assets/` directory.
 8. The principal result-table images are present; each experiment appears once and is not duplicated.
-9. Inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains.
-10. `Critical Thinking` contains no recap of experiment results.
-11. `Paradigm Demonstration` appears only for a verified milestone paper and names concrete later work that adopted the paradigm; ordinary papers omit it.
-12. Render the Pipeline Mermaid source successfully and inspect its composition, then open the completed note in Typora and visibly confirm that the full title, images, NOTE callouts, inline/display formulas, result tables, and Mermaid diagram render correctly and remain nested under their sections.
+9. `Experiment` opens with a research-logic Mermaid overview grounded in actual experiments; it explains why the evidence chain is coherent without replacing result evidence.
+10. Inline math uses `$...$`, display math uses standalone `$$` blocks, and no alternative LaTeX delimiter remains.
+11. `Critical Thinking` contains no recap of experiment results.
+12. `Paradigm Demonstration` appears only for a verified milestone paper and names concrete later work that adopted the paradigm; ordinary papers omit it.
+13. Render both the Experiment research-logic overview and Pipeline Mermaid source successfully and inspect their composition, then open the completed note in Typora and visibly confirm that the full title, images, NOTE callouts, inline/display formulas, result tables, and both diagrams render correctly and remain nested under their sections.
 
 ## Final grounding rule
 
