@@ -29,6 +29,7 @@ I write concise Chinese-dominant mixed-language summaries in Typora-friendly mar
 - Match nearby files before inventing a new structure
 - Write explanations mainly in Chinese, but keep technical nouns, module names, benchmark names, and short technical phrases in English when that is clearer (Note: `Takeaway` is strictly English-only)
 - Keep Markdown readable in Typora
+- **Strict 1–2 sentences per point rule**: Every bullet point across all summary sections (`Motivation`, `Core Mechanism`, `Experiment`, `Critical Thinking`) must be strictly limited to **at most 1–2 sentences** (`每个 point 最多 1～2 句话`). Eliminate low-density filler and capture the underlying insight directly
 - Preserve existing frontmatter, title, TOC, and unrelated note content unless the task explicitly asks to restructure them
 
 ## Required note structure
@@ -109,6 +110,7 @@ Use the main summary sections as second-level list items under the note topic, n
 ```
 
 - `Takeaway` must be written strictly in English. Keep only a compact compositional formula when one clearly captures the method; otherwise use one or two concise sentences. Render the formula as plain text, without backticks, quotation marks, or other wrapping.
+- **Hard brevity constraint**: Every bullet item across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **at most 1–2 sentences** (`每个 point 最多 1～2 句话`). Never write paragraph-long entries.
 - `Motivation`, `Core Mechanism`, `Experiment`, `Pipeline`, and `Critical Thinking` should use the same `* Section Name` (or `- Section Name`) list-item format.
 - Indent every detail under its owning section: prose, formulas, figures, NOTE callouts, and code/Mermaid blocks must belong to the section or child bullet they explain. Use 2 spaces per list level so the structure remains foldable in Typora.
 - Never leave Takeaway prose, a framework figure, a formula, an experiment image, or a NOTE callout at the top level merely because the related section uses a list item.
@@ -131,13 +133,13 @@ Use the main summary sections as second-level list items under the note topic, n
 - Apply the completed-outcome test: if the core-problem sentence can stand under the paper's result or contribution without change, it states the solution rather than the gap. Move the intended capability into `论文目标` and keep the problem focused on the missing capability and its constraint.
 - Explain why existing routes cannot provide that capability. Typical routes include imitation, offline RL, direct online interaction, additional supervision, or stronger models; choose only routes relevant to the paper.
 - State the **paper objective** as the framework or capability the work aims to build.
-- Keep this section to 3–4 concise bullets. The nature of the problem may require inference from the Introduction, experiments, and Conclusion; label interpretation when the paper does not state it verbatim.
+- Keep this section to 3–4 concise bullets, with **each bullet strictly limited to at most 1–2 sentences**. The nature of the problem may require inference from the Introduction, experiments, and Conclusion; label interpretation when the paper does not state it verbatim.
 
 ### Core Mechanism
 - Identify the paper's central framework before listing implementation choices. State the capability it creates and the complete operating loop that makes that capability possible.
 - Present the central framework first, with its explanation, formula, and figure nested under one `核心框架：<Framework Name>` bullet. Then nest each supporting capability or module (for example V, M, and C) under a `支撑能力` bullet inside that framework. Never place module capabilities as peers of the core-framework bullet.
 - Use a named framework when the paper provides one. For a system paper, prefer Chinese labels such as `核心框架：<Framework Name>`, `支撑能力一：<Capability>`, and `支撑能力二：<Capability>` when this hierarchy is genuinely useful; do not force those exact labels onto a paper with another natural organization.
-- Do not reduce the section to a flat list of modules, losses, architecture names, or engineering tricks. Explain how each design enables the framework and why it is necessary.
+- Do not reduce the section to a flat list of modules, losses, architecture names, or engineering tricks. Explain how each design enables the framework and why it is necessary in **at most 1–2 sentences per bullet/point**.
 - Do not split points into `What`, `Why`, and `How` subsections.
 - Explain the mechanism of every framework module. Embed its original mechanism figure when one exists. When a module has no dedicated figure, use its governing formula or a precise textual explanation instead; do not create a NOTE merely to announce that no figure exists.
 - Place each figure inside the mechanism point it explains. Use multiple figures when they explain distinct mechanism points, such as architecture, qualitative behavior, and training loop. Do not use a fixed one-figure limit.
@@ -196,7 +198,7 @@ Default structure:
 - The research-logic overview does not replace result figures, tables, ablations, or the final `Pipeline`: it explains why the experiments form a coherent study, while result evidence supports individual claims and `Pipeline` explains the method's operating path.
 - Use task or benchmark figures when they materially explain difficulty, coverage, or evaluation conditions. Place each figure under its experiment item and follow it with a `> [!NOTE]` overview-and-explanation callout.
 - Include the principal result-table images as local screenshots. Crop only the table and caption, preserving headers, all methods needed for comparison, and the proposed method's row. Readable quantitative results must not exist only as prose.
-- Merge all discussion of the same experiment into one child bullet. State the setup and conclusion once under that bullet, then place its table image and single NOTE callout; do not create separate conclusion and table entries for the same experiment or repeat CarRacing, VizDoom, or another benchmark as duplicate experiments.
+- Merge all discussion of the same experiment into one child bullet. State the setup and quantitative conclusion compactly in **at most 1–2 sentences** under that bullet, then place its table image and single NOTE callout; do not create separate conclusion and table entries for the same experiment or repeat CarRacing, VizDoom, or another benchmark as duplicate experiments.
 - Summarize ablations by the causal design driver and measured effect, not by reproducing every number.
 
 ### Pipeline
@@ -239,21 +241,21 @@ Default structure:
 - Indent all sub-points under `* Critical Thinking` with 2 spaces to maintain Typora list folding.
 - Start with a one-sentence `**Contribution**` item before `Pros`. Classify the paper's primary value as a new challenge or problem formulation, a new solution or method, or a new research paradigm or direction. State the contribution at the scope the paper actually establishes; use wording such as "proposes and preliminarily validates" when the work opens a direction without delivering a complete system. If the user supplies a contribution judgment, preserve its intent and check it against the paper.
 - Do not recap experiment results already stated in `Experiment`. Discuss strengths, failure modes, trade-offs, evidence boundaries, and future directions instead.
-- Analyze the paper across the following six dimensions using high-density, technically rigorous bullets:
+- Analyze the paper across the following six dimensions using high-density, technically rigorous bullets, **where each bullet is strictly at most 1–2 sentences**:
 
   1. **Contribution**:
      - Write exactly one sentence that identifies the paper's primary value and why: a new challenge, a new solution, or a new research paradigm or direction.
      - Do not turn this into a list of all contributions, repeat the Takeaway, or claim completeness beyond the paper's evidence.
 
   2. **Pros**:
-     - Concrete architectural or conceptual strengths only (2–3 concise bullets).
+     - Concrete architectural or conceptual strengths only (2–3 concise bullets, each strictly at most 1–2 sentences).
      - Do not repeat benchmark results, quantitative margins, or claims already stated in `Experiment`.
      - State the contribution boundary when the paper contrasts with neighboring work. A milestone contribution may be a novel combination or a scalable demonstration rather than a world-first mechanism; do not turn priority nuance into an unsupported novelty claim.
      - Add a `**Paradigm Demonstration**` bullet only for a milestone paper with verified evidence that later work adopted its core framework, problem formulation, or training loop as a reusable research direction. Explain the demonstrated paradigm and cite the concrete later work; do not infer paradigm status from novelty, popularity, or citation count alone. Omit this bullet for ordinary papers.
 
   3. **Cons**:
      - Do NOT write vague generic complaints (such as "hyperparameters are difficult to tune" or "discrete only").
-     - Focus on concrete failure modes, breakdown conditions, and adversarial settings (2–3 precise, technically rigorous bullets):
+     - Focus on concrete failure modes, breakdown conditions, and adversarial settings (2–3 precise, technically rigorous bullets, each strictly at most 1–2 sentences):
        - What theoretical assumptions break down under non-ideal settings?
        - In what specific pathological scenarios, reward structures, or physical conditions does the algorithm fail or suffer severe degradation (e.g. relative overgeneralization in climbing games, bootstrap divergence, synchronization lag, topological fragmentation)?
 
@@ -578,6 +580,7 @@ After completing the summary, reread the entire note once as a compact review no
 
 - Remove repeated statements between `Takeaway`, `Motivation`, `Core Mechanism`, and `Pipeline`.
 - Keep only problems, frameworks, mechanisms, formulas, figures, tables, and critical thinking points that materially improve understanding.
+- **Check point-level sentence count**: Verify that every bullet point across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly at most 1–2 sentences; trim any bullet exceeding 2 sentences down to its core essence.
 - Check that `Takeaway` is strictly English and uses either a plain-text compositional formula or one or two sentences, with no code ticks, quotes, wrapping, or `Lineage` section.
 - Check that `Motivation` states the unresolved capability gap and paper objective, not just prior-work defects or the paper's achieved result.
 - Check that the core-problem sentence does not read as a completed claim. Move an intended ability into the paper objective when removing it makes the problem statement still valid.
@@ -678,6 +681,7 @@ Match the repository's existing local asset pattern.
 12. For a milestone paper only, add `Paradigm Demonstration` under `Critical Thinking` after verifying that later work adopted its framework, problem formulation, or training loop; omit it when that evidence is absent.
 13. Begin `Critical Thinking` with a one-sentence `Contribution` judgment that classifies the primary value as a new challenge, new solution, or new research paradigm within the paper's demonstrated scope.
 14. Reread the completed note, run the completion validation below, and inspect the title, images, formulas, tables, and both Mermaid diagrams in Typora.
+15. Strictly enforce the 1–2 sentences per point constraint across every bullet item in `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` to ensure maximum information density and conciseness.
 
 ## Must not do
 
@@ -688,6 +692,7 @@ Match the repository's existing local asset pattern.
 - Do not use `[[Vault Links]]`, wiki links, or other concept-link syntax
 - Do not include a `System Model & Assumptions` subsection
 - Do not dump the whole abstract or whole paper into the note
+- Do not write paragraph-long or multi-sentence essays under any bullet point (strict maximum of 1–2 sentences per point)
 - Do not begin the metadata line with an author list or omit the full bold paper title
 - Do not include formulas that are not central to the method
 - Do not use LaTeX backslash-parenthesis or backslash-bracket delimiters for math
@@ -726,6 +731,7 @@ Do not report completion until all checks pass:
 11. `Critical Thinking` begins with exactly one `Contribution` sentence before `Pros`, and contains no recap of experiment results.
 12. `Paradigm Demonstration` appears only for a verified milestone paper and names concrete later work that adopted the paradigm; ordinary papers omit it.
 13. Render both the Experiment research-logic overview and Pipeline Mermaid source successfully and inspect their composition, then open the completed note in Typora and visibly confirm that the full title, images, NOTE callouts, inline/display formulas, result tables, and both diagrams render correctly and remain nested under their sections.
+14. Every bullet point across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is verified to be strictly at most 1–2 sentences, delivering maximum insight density with zero bloat.
 
 ## Final grounding rule
 
