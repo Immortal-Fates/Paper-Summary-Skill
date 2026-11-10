@@ -11,7 +11,7 @@ Summaries are written in Chinese-dominant mixed-language style, except `Takeaway
 
 ## Core conventions
 
-- **Strict 1–2 sentences per point rule**: Every bullet point across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **at most 1–2 sentences**. Zero low-density filler; distill core insights directly.
+- **Strict 1-sentence per point rule**: Every bullet point across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **exactly 1 concise sentence** (严格单句，中文约 25–45 字，直接陈述本质因果，严禁分号拼接、复合从句或无信息量套话).
 - **English captions with Chinese explanations**: All bullet captions must be in English Title Case (e.g. `**Core Problem**:`, `**Core Framework**:`, `**Key Component**:`, `**Failure Mode**:`); the explanatory prose remains concise Chinese-dominant mixed-language.
 - **Typora list hierarchy**: Main summary sections are list items (`* Section Name` or `- Section Name`) under the note topic. All child content (prose, formulas, images, `> [!NOTE]` callouts, and Mermaid diagrams) must be indented by 2 spaces under its owning bullet to fold correctly in Typora.
 - **Preserve existing scaffolding**: If editing an existing note file, preserve existing frontmatter, title, TOC, and unrelated note content.
@@ -35,8 +35,8 @@ Follow this exact section order:
 
 * Motivation
 
-  * **Core Problem**：总结论文意图解决的底层能力鸿沟与核心痛点（以中文阐述，最多1–2句话）；严禁描述论文已达成的方案。
-  * **Why Existing Routes Fail**：说明现有替代路线为何无法提供该能力（以中文阐述，最多1–2句话）。
+  * **Core Problem**：以中文单句（25–45字）直击底层能力鸿沟与核心痛点；严禁描述论文已达成的方案。
+  * **Why Existing Routes Fail**：以中文单句（25–45字）说明现有替代路线为何在机理上无法提供该能力。
 
 * Core Mechanism
 
@@ -81,7 +81,7 @@ Follow this exact section order:
       Explain -.->|"Revises assumptions"| Learn
   ```
 
-  * **<Experiment or Benchmark Name>**：在单个条目中总结实验设置与定量结论（最多1–2句话），随后放置主要结果表截图。
+  * **<Experiment or Benchmark Name>**：以单句总结实验设置与核心定量结论（25–45字），随后放置主要结果表截图。
 
     ![Principal result table](assets/<note-file-base>.assets/main-results.png)
 
@@ -107,9 +107,9 @@ Follow this exact section order:
 
 * Critical Thinking
 
-  * **Contribution**: 一句话判断论文核心价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
+  * **Contribution**: 严格单句判断论文核心价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
   * **Pros**:
-    * 架构与原理优势（最多1–2句话，不重复实验结果）。
+    * 纯架构与原理优势（严格单句，不复述实验结果）。
     * **Paradigm Demonstration**：（仅限里程碑论文）说明示范的范式及后续采纳的具体代表工作。
   * **Cons**:
     * **Failure Mode: <Name>**：说明理论假设破裂、病态场景或极端环境下的退化机制。
@@ -129,13 +129,13 @@ Follow this exact section order:
 
 ### Motivation
 - **Content strictly in Chinese**: Only the bold captions (`**Core Problem**:`, `**Why Existing Routes Fail**:`) are in English Title Case. The explanation body must be written in concise **Chinese-dominant** prose. Never write English paragraphs in Motivation.
-- Strictly 2 concise bullets, each at most 1–2 sentences:
-  - `**Core Problem**`: State the unresolved capability gap as a question or limitation in Chinese. Apply the completed-outcome test: if the sentence reads as an accomplished method, move that capability to `Core Mechanism`.
-  - `**Why Existing Routes Fail**` (or `**Limitation of Existing Work**`): Explain in Chinese why existing alternatives (imitation, offline RL, extra supervision, scaling, etc.) cannot provide that capability.
+- Strictly 2 concise bullets, each strictly **1 single sentence** (25–45 characters):
+  - `**Core Problem**`: State the unresolved capability gap as a single sharp sentence in Chinese. Apply the completed-outcome test: if the sentence reads as an accomplished method, move that capability to `Core Mechanism`.
+  - `**Why Existing Routes Fail**` (or `**Limitation of Existing Work**`): Explain in a single sentence why existing alternatives (imitation, offline RL, extra supervision, scaling, etc.) cannot provide that capability.
 - Do NOT introduce the proposed framework name, solution, or architecture here; keep motivation pure.
 
 ### Core Mechanism
-- Start immediately with the central framework or method, connecting from the capability gap in `Motivation`.
+- Start immediately with the central framework or method, connecting from the capability gap in `Motivation`. Every bullet must be strictly **1 single sentence** (25–45 characters).
 - **System / Multi-module papers**:
   - Nest explanation, core objective formula, and overview figure under `**Core Framework: <Framework Name>**`.
   - Nest supporting modules under `**Key Component: <Component Name>**` (or `**Supporting Capability: <Capability Name>**`) inside the core framework bullet. Never make modules peer bullets with the core framework.
@@ -146,7 +146,7 @@ Follow this exact section order:
 
 ### Experiment
 - Open with a compact Mermaid research-logic overview diagram showing the study evidence chain (`Problem -> Learnability -> Predictability -> Analysis/Boundaries`).
-- Merge all discussion of the same experiment/benchmark into one child bullet (1–2 sentences combining setup and quantitative conclusion).
+- Merge all discussion of the same experiment/benchmark into one child bullet (strictly 1 single sentence combining setup and quantitative conclusion).
 - Follow each experiment bullet with the principal cropped result table screenshot and its single `> [!NOTE]` callout. Never duplicate the same experiment across benchmarks.
 
 ### Pipeline
@@ -156,7 +156,7 @@ Follow this exact section order:
 - Distinguish evaluated modules from proposed/future integration using explicit `classDef` styles.
 
 ### Critical Thinking
-- Merge all critical insights into this single section across 6 dimensions (each bullet at most 1–2 sentences):
+- Merge all critical insights into this single section across 6 dimensions (each bullet strictly 1 concise sentence):
   1. `**Contribution**`: Exactly 1 sentence classifying the value as a new challenge, new solution, or new paradigm within verified evidence bounds.
   2. `**Pros**`: Architectural/methodological strengths. Include `**Paradigm Demonstration**` only for verified milestone papers with cited successors.
   3. `**Cons**`: Concrete failure modes under `**Failure Mode: <Name>**:` (breakdown conditions, pathological cases, synchronization/sample divergence).
@@ -194,7 +194,7 @@ Follow this exact section order:
 
 Before completing the summary, verify every invariant:
 1. **Metadata line**: Begins with full paper title in bold; author list truncated to `First Author et al.` when > 3 authors; contains mandatory `(Citations __N__)` or `(Citations __unknown__)`.
-2. **Strict brevity**: Every bullet across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly at most 1–2 sentences.
+2. **Strict single-sentence brevity**: Every bullet point across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (25–45 characters, no semicolon chaining, no run-on clauses, high insight density).
 3. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
 4. **Direct core mechanism**: `Core Mechanism` starts directly with the central framework (`Core Framework`) and nested components (`Key Component`), or with `Core Formulation` for non-system papers.
 5. **Language separation**: Only `Takeaway` is in English. Across all other sections (`Motivation`, `Core Mechanism`, `Experiment`, `Critical Thinking`), only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
