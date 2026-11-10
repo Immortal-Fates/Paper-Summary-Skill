@@ -35,8 +35,8 @@ Follow this exact section order:
 
 * Motivation
 
-  * **Core Problem**: Synthesize the unresolved capability gap the paper targets; do not describe an already achieved result.
-  * **Why Existing Routes Fail**: Explain why existing alternatives cannot provide that capability.
+  * **Core Problem**：总结论文意图解决的底层能力鸿沟与核心痛点（以中文阐述，最多1–2句话）；严禁描述论文已达成的方案。
+  * **Why Existing Routes Fail**：说明现有替代路线为何无法提供该能力（以中文阐述，最多1–2句话）。
 
 * Core Mechanism
 
@@ -128,9 +128,10 @@ Follow this exact section order:
 - Never wrap in backticks, quotes, or code fences. No Chinese allowed in this section.
 
 ### Motivation
+- **Content strictly in Chinese**: Only the bold captions (`**Core Problem**:`, `**Why Existing Routes Fail**:`) are in English Title Case. The explanation body must be written in concise **Chinese-dominant** prose. Never write English paragraphs in Motivation.
 - Strictly 2 concise bullets, each at most 1–2 sentences:
-  - `**Core Problem**`: State the unresolved capability gap as a question or limitation. Apply the completed-outcome test: if the sentence reads as an accomplished method, move that capability to `Core Mechanism`.
-  - `**Why Existing Routes Fail**` (or `**Limitation of Existing Work**`): Explain why existing alternatives (imitation, offline RL, extra supervision, scaling, etc.) cannot provide that capability.
+  - `**Core Problem**`: State the unresolved capability gap as a question or limitation in Chinese. Apply the completed-outcome test: if the sentence reads as an accomplished method, move that capability to `Core Mechanism`.
+  - `**Why Existing Routes Fail**` (or `**Limitation of Existing Work**`): Explain in Chinese why existing alternatives (imitation, offline RL, extra supervision, scaling, etc.) cannot provide that capability.
 - Do NOT introduce the proposed framework name, solution, or architecture here; keep motivation pure.
 
 ### Core Mechanism
@@ -196,7 +197,7 @@ Before completing the summary, verify every invariant:
 2. **Strict brevity**: Every bullet across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly at most 1–2 sentences.
 3. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
 4. **Direct core mechanism**: `Core Mechanism` starts directly with the central framework (`Core Framework`) and nested components (`Key Component`), or with `Core Formulation` for non-system papers.
-5. **English captions**: All bullet captions are in English Title Case; explanations are Chinese-dominant.
+5. **Language separation**: Only `Takeaway` is in English. Across all other sections (`Motivation`, `Core Mechanism`, `Experiment`, `Critical Thinking`), only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
 6. **Takeaway**: Strictly English compositional formula or 1–2 sentences, without quotes, code fences, or backticks.
 7. **Mermaid diagrams**: `Experiment` begins with the research-logic overview diagram; `Pipeline` is an action-specific flowchart with styled node classes.
 8. **Figures, tables & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, immediately followed by a `> [!NOTE]` with English visual anchors. Principal result table is visually embedded.

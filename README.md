@@ -44,7 +44,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 
 ### 2. 标准 6 大板块
 1. **Takeaway**：纯英文概括，优先采用纯文本组合公式（如 `Method = Framework + Component A + Component B`）或 1–2 句总结，不加引号或代码块包装。
-2. **Motivation**：严格包含 `**Core Problem**:`（未解决的能力鸿沟）与 `**Why Existing Routes Fail**:`（现有方案缺陷），不在此处提前剧透或泄露具体方法名称。
+2. **Motivation**：以中文阐述 `**Core Problem**:`（底层能力鸿沟与痛点）与 `**Why Existing Routes Fail**:`（现有替代方案缺陷），仅标签为英文，内容必须保持中文，不提前剧透具体方案。
 3. **Core Mechanism**：
    - **系统/架构类论文**：先给 `**Core Framework: <Framework Name>**`（闭环解释、全局架构图、核心目标函数），下钻嵌套 `**Key Component: <Component Name>**`；
    - **非系统/理论类论文**：弹性平铺 `**Core Formulation: <Name>**` 与 `**Theoretical Property: <Name>**`；
