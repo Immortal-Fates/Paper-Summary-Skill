@@ -54,13 +54,13 @@ Follow this exact section order:
     > **Figure 1. <Original caption or concise overview>.** **Top: Rollout Stage** 说明各分区作用；**Left: Architecture** 说明闭环连接关系。
 
     $$
-    \text{Core framework objective}
+    \mathcal{L} = \mathcal{L}_{\text{recon}} + \mathcal{L}_{\text{codebook}} + \beta \mathcal{L}_{\text{commit}}
     $$
 
-    说明公式如何定义框架闭环，并只定义关键符号。
+    单句拆解总目标各分项分别优化哪些参数/模块，并讲明梯度截断（如 $\text{sg}$）或正则项的物理约束目的。
 
-    * **Component: <Component Name>**：单句阐述该部分在系统中的数据流与功能职责。
-    * **Component: <Component Name & Solved Bottleneck>**：单句阐述该组件设计如何解决该环节的具体技术瓶颈（如不可微反传、维度灾难等）。
+    * **Component: <Component Name>**：单句交代表征数据形态（如 $H \times W \times D$ 空间网格或序列 Token）与具体数据流职责。
+    * **Component: <Component Name & Solved Bottleneck>**：单句讲透该组件的具体算子实现（如前向与反向梯度的具体流动），以及如何解决该环节的技术死穴。
 
       ![Mechanism figure](assets/<note-file-base>.assets/mechanism.png)
 
@@ -70,7 +70,7 @@ Follow this exact section order:
     * **Component: <Component Name>**：单句说明另一核心组成部分的设计巧思与运作机理。
 
       $$
-      \text{Essential formula}
+      \text{Essential local formula}
       $$
 
 * Pipeline
@@ -88,7 +88,7 @@ Follow this exact section order:
       class Input,Model process
       class Gate decision
       class Review future
-  ```
+```
 
 * Experiment
 
@@ -150,8 +150,9 @@ Follow this exact section order:
 - Start immediately with the central framework or method, connecting from the capability gap in `Motivation`. Every bullet must be strictly **1 single sentence** (25–45 characters).
 - **System / Multi-module papers**:
   - **Framework overview with explicit decomposition**: The opening `**Core Framework: <Framework Name>**` bullet must state the complete operating loop AND explicitly declare what constituent parts/modules/stages make up the system (e.g. "整体由 A、B、C 三部分组成").
-  - **Component breakdown as nested list**: Nest each constituent part under `**Component: <Component Name>**` (or `**Stage: <Stage Name>**` for phased pipelines) inside the core framework bullet. Never make components peer bullets with the core framework.
-  - **Problem-solution pairing inside components**: Each component bullet must articulate both its functional role in the pipeline and the specific technical bottleneck it resolves (e.g. explain Vector Quantizer and how STE resolves non-differentiable gradient flow directly within the quantizer component; never detach STE as a floating, arbitrary component).
+  - **Explicit data shape & spatial granularity**: Explicitly specify the data representation format and granularity (e.g. spatial grid $H \times W \times D$ with per-location vector matching, discrete token sequences, or latent vectors). Never leave data format ambiguous.
+  - **Operational mechanism inside components**: Each `**Component: <Name>**` bullet must articulate its concrete mathematical or algorithmic operation (e.g. explain *how* STE copies decoder gradients $\nabla_{z_q}\mathcal{L}$ directly to encoder output $z_e$, rather than vaguely saying "solves non-differentiability"). Ban empty filler phrases like "提取高层表征" or "有效压缩信息瓶颈".
+  - **Loss function parameter update mechanics**: When explaining multi-term objectives/losses, explicitly articulate **which term updates which parameters/modules** and the physical purpose of gradient stops (e.g. $\text{sg}$) or regularization terms.
   - Embed overview figure and global objective formula directly under `Core Framework`; embed local mechanism figures and sub-formulas under their corresponding `Component` bullets.
 - **Non-system / Single-mechanism or Theoretical papers**:
   - Do NOT force the `Core Framework` / `Component` hierarchy onto single-mechanism, empirical, or purely mathematical papers.
@@ -171,6 +172,7 @@ Follow this exact section order:
 - Open with a compact Mermaid research-logic overview diagram showing the study evidence chain (`Problem -> Learnability -> Predictability -> Analysis/Boundaries`).
 - Merge all discussion of the same experiment/benchmark into one child bullet (strictly 1 single sentence combining setup and quantitative conclusion).
 - Follow each experiment bullet with the principal cropped result table screenshot and its single `> [!NOTE]` callout. Never duplicate the same experiment across benchmarks.
+- **No text table duplication**: Quantitative conclusions belong strictly in the single experiment bullet. Never dump an unformatted or redundant markdown/ASCII text table below that merely repeats the numbers already stated in the sentence.
 
 ### Critical Thinking
 - Pure reflection and critical analysis across 5 dimensions (each bullet strictly 1 concise sentence):
@@ -187,14 +189,14 @@ Follow this exact section order:
 - Title line format:
   ```markdown
   **<Full Paper Title>**. <Authors>. **<Venue>**, **<Year>**. [(Paper)](URL) [(Project)](URL) (Citations __N__)
-  ```
+```
 - **Author list constraint**:
   - 1 to 3 authors: list all names (`Author 1, Author 2, Author 3`).
   - More than 3 authors: strictly truncate to first author plus et al.: `First Author et al.`.
 - **Mandatory citation count**: Include `(Citations __N__)` verified from Semantic Scholar (`[(S2)](URL)`), OpenAlex, Google Scholar, or Crossref. If truly unresolvable, write `(Citations __unknown__)`. Never omit this field.
 
 ### Formulas and callouts
-- **Math delimiters**: Strictly `$...$` for inline math; standalone `$$` blocks for display equations. Never use LaTeX `\( ... \)` or `\[ ... \]`.
+- **Math delimiters & blank lines**: Strictly `$...$` for inline math; standalone `$$` blocks for display equations. Standalone `$$...$$` blocks must have a blank line before and after. Never place a display formula on the same line as a markdown bullet (`*`) or text. Never use LaTeX `\( ... \)` or `\[ ... \]`.
 - **Figure & Table NOTE**: Every embedded image must be immediately followed by exactly one `> [!NOTE]` at the same indentation level. First line must be a concise overview reusing original caption; followed by explanation using English visual anchors (`**Top: ...**`, `**Left: ...**`, `**(b) ...**`, `**Row: ...**`).
 - **Asset paths**: Save images locally to `assets/<note-file-base>.assets/<filename>` and reference with relative paths (`assets/<note-file-base>.assets/<filename>` or `./assets/<note-file-base>.assets/<filename>`).
 
@@ -213,10 +215,10 @@ Before completing the summary, verify every invariant:
 2. **Strict single-sentence brevity**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (25–45 characters, no semicolon chaining, no run-on clauses, high insight density).
 3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single sentence classifying primary value).
 4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
-5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts with `Core Framework` (stating the closed loop and explicitly listing its constituent parts) and nests `Component:` bullets (embedding role and solved technical problem); non-system papers use `Core Formulation` and `Theoretical Property`. Followed immediately by `Pipeline` as runtime execution view before `Experiment`.
+5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts with `Core Framework` (stating the closed loop and explicitly listing constituent parts), nests `Component:` bullets explaining concrete operational mechanisms (data shape, gradient flow, and parameter updates without empty filler); non-system papers use `Core Formulation` and `Theoretical Property`. Followed immediately by `Pipeline` before `Experiment`.
 6. **Language separation**: Only `Takeaway` is in English. Across all other sections, only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
 7. **Takeaway**: Exactly 1 strictly English causal insight punchline (Mechanism + Innovation -> Solved Bottleneck), without noun-stacking formulas (`Method = A + B + C`), quotes, code fences, or backticks.
-8. **Mermaid diagrams**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram.
+8. **Mermaid diagrams & no table duplication**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram. Never generate redundant text tables duplicating bullet sentences.
 9. **Figures, tables & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, immediately followed by a `> [!NOTE]` with English visual anchors. Principal result table is visually embedded.
-10. **Delimiters & foldability**: Math uses only `$...$` and `$$...$$`; all child content is indented with 2 spaces under its owning list item.
+10. **Delimiters & foldability**: Math uses only `$...$` and standalone `$$...$$` with blank lines before/after (never glued to bullet lines); all child content is indented with 2 spaces under its owning list item.
 11. **Proper nouns in English**: All technical terms, module names, architecture concepts, and benchmark names strictly preserve their standard English terminology; never translate them into localized Chinese (e.g. strictly use "Vector Quantizer", not "离散码本量化器"; use "Encoder / Decoder", not "编码器 / 解码器").

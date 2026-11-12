@@ -47,11 +47,11 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 2. **Contribution**：紧随 Takeaway 之后，以中文严格单句定性论文的核心学术价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
 3. **Motivation**：以中文阐述 `**Core Problem**:`（底层能力鸿沟与痛点）与 `**Why Existing Routes Fail**:`（现有替代方案缺陷），仅标签为英文，内容必须保持中文，不提前剧透具体方案。
 4. **Core Mechanism**：
-   - **系统/架构类论文**：首句给出 `**Core Framework: <Framework Name>**`（概述闭环并明确点明系统由哪几部分组成），下属按系统模块以 List 形式展开 `**Component: <Component Name>**`（每个模块内生说明其功能与解决的技术瓶颈，如 STE 解决离散不可微），绝不孤立罗列技术点；
+   - **系统/架构类论文**：首句给出 `**Core Framework: <Framework Name>**`（概述闭环并明确点明系统由哪几部分组成），下属按系统模块以 List 形式展开 `**Component: <Component Name>**`；每个模块必须交代表征数据形态（如空间网格、Token 序列）并讲透算子级实现机理（如前向输出与反向梯度复制），严禁“提取高层表征”等空泛套话；复合目标函数必须单句拆解各项分别更新哪些参数模块；
    - **非系统/理论类论文**：弹性平铺 `**Core Formulation: <Name>**` 与 `**Theoretical Property: <Name>**`；
-   - 公式紧随对应要点，图表均附带英文方位视觉锚点（如 `**Top: ...**`、`**Left: ...**`）的 `> [!NOTE]` 说明。
+   - 公式紧随对应要点，独立块公式前后必须留空行（严禁与列表行粘连），图表均附带英文方位视觉锚点（如 `**Top: ...**`、`**Left: ...**`）的 `> [!NOTE]` 说明。
 5. **Pipeline**：紧跟 Core Mechanism 作为动态运行时流程图，纯 Mermaid 机制与决策流程图（默认 `flowchart LR`），使用统一的高对比度色彩类区分普通处理、判定节点与未来扩展。
-6. **Experiment**：以 Mermaid 研究逻辑图开篇（串联“问题发现 → 可学习性 → 模型预测 → 边界分析”），随后单条目提炼各关键实验（严格单句，25～45字），并截取主结果表图片。
+6. **Experiment**：以 Mermaid 研究逻辑图开篇（串联“问题发现 → 可学习性 → 模型预测 → 边界分析”），随后单条目提炼各关键实验（严格单句，25～45字），并截取主结果表图片（严禁在单句下方重复堆砌内容一致的纯文本表格）。
 7. **Critical Thinking**：纯粹的深度批判与反思，每个子要点严格单句，涵盖 `Pros`（含里程碑论文可选的 `Paradigm Demonstration`）、`Cons`（具象的 `Failure Mode: <Name>`）、`Trade-offs`（性能与代价置换评估）、`Empirical Support`（实验公正性与消融盲区）及 `Future Directions`（下一步瓶颈）。
 
 ## 核心设计原则
