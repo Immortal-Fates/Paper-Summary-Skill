@@ -47,7 +47,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 2. **Contribution**：紧随 Takeaway 之后，以中文严格单句定性论文的核心学术价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
 3. **Motivation**：以中文阐述 `**Core Problem**:`（底层能力鸿沟与痛点）与 `**Why Existing Routes Fail**:`（现有替代方案缺陷），仅标签为英文，内容必须保持中文，不提前剧透具体方案。
 4. **Core Mechanism**：
-   - **系统/架构类论文**：先给 `**Core Framework: <Framework Name>**`（闭环解释、全局架构图、核心目标函数），下钻嵌套 `**Key Component: <Component Name>**`；
+   - **系统/架构类论文**：首句给出 `**Core Framework: <Framework Name>**`（概述闭环并明确点明系统由哪几部分组成），下属按系统模块以 List 形式展开 `**Component: <Component Name>**`（每个模块内生说明其功能与解决的技术瓶颈，如 STE 解决离散不可微），绝不孤立罗列技术点；
    - **非系统/理论类论文**：弹性平铺 `**Core Formulation: <Name>**` 与 `**Theoretical Property: <Name>**`；
    - 公式紧随对应要点，图表均附带英文方位视觉锚点（如 `**Top: ...**`、`**Left: ...**`）的 `> [!NOTE]` 说明。
 5. **Pipeline**：紧跟 Core Mechanism 作为动态运行时流程图，纯 Mermaid 机制与决策流程图（默认 `flowchart LR`），使用统一的高对比度色彩类区分普通处理、判定节点与未来扩展。

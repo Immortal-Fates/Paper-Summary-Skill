@@ -45,7 +45,7 @@ Follow this exact section order:
 
 * Core Mechanism
 
-  * **Core Framework: <Framework Name>**：说明论文如何从核心问题转向该框架，以及框架的完整闭环。
+  * **Core Framework: <Framework Name>**：单句概括从核心问题转向该框架的完整闭环，并明确指出系统由哪几个核心部分/阶段组成。
 
     ![Framework](assets/<note-file-base>.assets/framework.png)
 
@@ -58,14 +58,15 @@ Follow this exact section order:
 
     说明公式如何定义框架闭环，并只定义关键符号。
 
-    * **Key Component: <Component Name>**：说明框架为何需要该能力，以及设计如何提供该能力。
+    * **Component: <Component Name>**：单句阐述该部分在系统中的数据流与功能职责。
+    * **Component: <Component Name & Solved Bottleneck>**：单句阐述该组件设计如何解决该环节的具体技术瓶颈（如不可微反传、维度灾难等）。
 
       ![Mechanism figure](assets/<note-file-base>.assets/mechanism.png)
 
       > [!NOTE]
-      > **Figure 2. <Original caption or concise overview>.** 说明该图呈现的机制与信息流。
+      > **Figure 2. <Original caption or concise overview>.** 说明该图呈现的局部机制与信息流。
 
-    * **Key Component: <Component Name>**：说明另一项必要能力及其关键公式或设计。
+    * **Component: <Component Name>**：单句说明另一核心组成部分的设计巧思与运作机理。
 
       $$
       \text{Essential formula}
@@ -147,11 +148,13 @@ Follow this exact section order:
 ### Core Mechanism
 - Start immediately with the central framework or method, connecting from the capability gap in `Motivation`. Every bullet must be strictly **1 single sentence** (25–45 characters).
 - **System / Multi-module papers**:
-  - Nest explanation, core objective formula, and overview figure under `**Core Framework: <Framework Name>**`.
-  - Nest supporting modules under `**Key Component: <Component Name>**` (or `**Supporting Capability: <Capability Name>**`) inside the core framework bullet. Never make modules peer bullets with the core framework.
+  - **Framework overview with explicit decomposition**: The opening `**Core Framework: <Framework Name>**` bullet must state the complete operating loop AND explicitly declare what constituent parts/modules/stages make up the system (e.g. "整体由 A、B、C 三部分组成").
+  - **Component breakdown as nested list**: Nest each constituent part under `**Component: <Component Name>**` (or `**Stage: <Stage Name>**` for phased pipelines) inside the core framework bullet. Never make components peer bullets with the core framework.
+  - **Problem-solution pairing inside components**: Each component bullet must articulate both its functional role in the pipeline and the specific technical bottleneck it resolves (e.g. explain Vector Quantizer and how STE resolves non-differentiable gradient flow directly within the quantizer component; never detach STE as a floating, arbitrary component).
+  - Embed overview figure and global objective formula directly under `Core Framework`; embed local mechanism figures and sub-formulas under their corresponding `Component` bullets.
 - **Non-system / Single-mechanism or Theoretical papers**:
-  - Do NOT force the `Core Framework` / `Key Component` hierarchy.
-  - Use a clean flat list: `**Core Formulation: <Name>**` (or `**Core Mechanism: <Name>**`) for the primary objective/algorithm, followed by `**Theoretical Property: <Name>**` (or `**Key Derivation: <Name>**`).
+  - Do NOT force the `Core Framework` / `Component` hierarchy onto single-mechanism, empirical, or purely mathematical papers.
+  - Use a clean flat list of bullets: `**Core Formulation: <Name>**` (or `**Core Mechanism: <Name>**`) for the primary objective/algorithm, followed by `**Theoretical Property: <Name>**` (or `**Key Derivation: <Name>**`) for theoretical guarantees, convergence bounds, or analytical properties.
 - Embed figures and formulas directly below the specific bullet they explain. Do not create separate "Math" or "Figure" sections.
 
 ### Pipeline
@@ -208,7 +211,7 @@ Before completing the summary, verify every invariant:
 2. **Strict single-sentence brevity**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (25–45 characters, no semicolon chaining, no run-on clauses, high insight density).
 3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single sentence classifying primary value).
 4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
-5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts directly with the central framework/formulation, followed immediately by `Pipeline` (Mermaid flowchart) as the runtime execution view before `Experiment`.
+5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts with `Core Framework` (stating the closed loop and explicitly listing its constituent parts) and nests `Component:` bullets (embedding role and solved technical problem); non-system papers use `Core Formulation` and `Theoretical Property`. Followed immediately by `Pipeline` as runtime execution view before `Experiment`.
 6. **Language separation**: Only `Takeaway` is in English. Across all other sections, only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
 7. **Takeaway**: Exactly 1 strictly English causal insight punchline (Mechanism + Innovation -> Solved Bottleneck), without noun-stacking formulas (`Method = A + B + C`), quotes, code fences, or backticks.
 8. **Mermaid diagrams**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram.
