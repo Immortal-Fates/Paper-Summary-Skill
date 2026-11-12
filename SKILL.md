@@ -13,6 +13,7 @@ Summaries are written in Chinese-dominant mixed-language style, except `Takeaway
 
 - **Strict 1-sentence per point rule**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **exactly 1 concise sentence** (严格单句，中文约 25–45 字，直接陈述本质因果，严禁分号拼接、复合从句或无信息量套话).
 - **English captions with Chinese explanations**: All bullet captions must be in English Title Case (e.g. `**Core Problem**:`, `**Core Framework**:`, `**Key Component**:`, `**Failure Mode**:`); the explanatory prose remains concise Chinese-dominant mixed-language.
+- **Preserve English for technical proper nouns**: All technical terms, module names, architecture components, algorithms, loss functions, benchmark names, and core theoretical constructs (e.g. `Encoder`, `Decoder`, `Vector Quantizer`, `Codebook`, `Straight-Through Estimator`, `Posterior Collapse`, `Attention`, `Diffusion`, `Latent Space`) must strictly remain in English throughout the text. Never translate them into awkward or localized Chinese phrases (e.g. strictly use "Vector Quantizer", never "离散码本量化器"; strictly use "Encoder / Decoder", never "编码器 / 解码器").
 - **Typora list hierarchy**: Main summary sections are list items (`* Section Name` or `- Section Name`) under the note topic. All child content (prose, formulas, images, `> [!NOTE]` callouts, and Mermaid diagrams) must be indented by 2 spaces under its owning bullet to fold correctly in Typora.
 - **Preserve existing scaffolding**: If editing an existing note file, preserve existing frontmatter, title, TOC, and unrelated note content.
 
@@ -155,6 +156,7 @@ Follow this exact section order:
 - **Non-system / Single-mechanism or Theoretical papers**:
   - Do NOT force the `Core Framework` / `Component` hierarchy onto single-mechanism, empirical, or purely mathematical papers.
   - Use a clean flat list of bullets: `**Core Formulation: <Name>**` (or `**Core Mechanism: <Name>**`) for the primary objective/algorithm, followed by `**Theoretical Property: <Name>**` (or `**Key Derivation: <Name>**`) for theoretical guarantees, convergence bounds, or analytical properties.
+- **Technical proper nouns strictly in English**: Component names, modules, and algorithm mechanisms (e.g. `Encoder`, `Decoder`, `Vector Quantizer`, `Codebook`, `Straight-Through Estimator`, `Prior`) must be written in English. Do NOT translate them into localized Chinese (e.g. use "Vector Quantizer", not "离散码本量化器").
 - Embed figures and formulas directly below the specific bullet they explain. Do not create separate "Math" or "Figure" sections.
 
 ### Pipeline
@@ -217,3 +219,4 @@ Before completing the summary, verify every invariant:
 8. **Mermaid diagrams**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram.
 9. **Figures, tables & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, immediately followed by a `> [!NOTE]` with English visual anchors. Principal result table is visually embedded.
 10. **Delimiters & foldability**: Math uses only `$...$` and `$$...$$`; all child content is indented with 2 spaces under its owning list item.
+11. **Proper nouns in English**: All technical terms, module names, architecture concepts, and benchmark names strictly preserve their standard English terminology; never translate them into localized Chinese (e.g. strictly use "Vector Quantizer", not "离散码本量化器"; use "Encoder / Decoder", not "编码器 / 解码器").

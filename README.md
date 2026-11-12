@@ -57,6 +57,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 ## 核心设计原则
 
 - **严格自包含**：所有结构与提取规则均内建于 `SKILL.md`，无需任何外部参考仓库。
+- **专业术语严格保留英文**：所有模块名、算法名、架构组件与学术专有名词（如 `Encoder`, `Decoder`, `Vector Quantizer`, `Codebook`, `Straight-Through Estimator`, `Posterior Collapse` 等）必须直接使用标准英文，严禁机械翻译为生硬中文（如严禁将 `Vector Quantizer` 译为“离散码本量化器”）。
 - **认知流顺畅（Cognitive Flow）**：顶层方案与定位先行（Takeaway + Contribution） → 问题与机制（Motivation + Core Mechanism + Pipeline） → 验证与批判（Experiment + Critical Thinking）。
 - **高信息密度与严格单句**：严禁废话与长篇大论，每个要点强制限制在严格单句（25～45字）内，禁止分号断句拼凑或从句堆叠。
 - **本地相对资产**：图表截图统一下载到相对路径 `assets/<note-file-base>.assets/`，确保跨平台与 Typora 本地离线正常渲染。
