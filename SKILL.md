@@ -32,7 +32,7 @@ Follow this exact section order:
 
 * Takeaway
 
-  Method = Primary Framework + Enabling Module A + Enabling Module B + Key Loss
+  Replaces continuous latent distributions with a discrete learned codebook via straight-through gradient estimation, fundamentally eliminating posterior collapse in VAEs.
 
 * Contribution
 
@@ -128,7 +128,9 @@ Follow this exact section order:
 ## Section specifications
 
 ### Takeaway
-- **Strictly English**: Plain-text compositional formula (`Method = Framework + Component A + Component B`) or 1–2 concise English sentences.
+- **Strictly English single-sentence punchline**: Exactly 1 high-density English sentence articulating the core insight.
+- **Causal insight structure**: Follow `[Core Mechanism/Action] + [Technical Innovation] -> [Solved Pain Point / Target Capability]`.
+- **Strict prohibition on noun-stacking formulas**: Do NOT write `Method = A + B + C` or chain proper nouns with `+` signs. The takeaway must explain *how* the innovation works and *what fundamental pain point* it resolves, not merely enumerate parts.
 - Never wrap in backticks, quotes, or code fences. No Chinese allowed in this section.
 
 ### Contribution
@@ -208,7 +210,7 @@ Before completing the summary, verify every invariant:
 4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
 5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts directly with the central framework/formulation, followed immediately by `Pipeline` (Mermaid flowchart) as the runtime execution view before `Experiment`.
 6. **Language separation**: Only `Takeaway` is in English. Across all other sections, only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
-7. **Takeaway**: Strictly English compositional formula or 1–2 sentences, without quotes, code fences, or backticks.
+7. **Takeaway**: Exactly 1 strictly English causal insight punchline (Mechanism + Innovation -> Solved Bottleneck), without noun-stacking formulas (`Method = A + B + C`), quotes, code fences, or backticks.
 8. **Mermaid diagrams**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram.
 9. **Figures, tables & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, immediately followed by a `> [!NOTE]` with English visual anchors. Principal result table is visually embedded.
 10. **Delimiters & foldability**: Math uses only `$...$` and `$$...$$`; all child content is indented with 2 spaces under its owning list item.

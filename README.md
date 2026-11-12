@@ -43,7 +43,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 ```
 
 ### 2. 标准 7 大板块
-1. **Takeaway**：纯英文概括核心方法组合，优先采用纯文本组合公式（如 `Method = Framework + Component A + Component B`）或 1–2 句总结，不加引号或代码块包装。
+1. **Takeaway**：严格 1 句纯英文因果洞察句（Insight Punchline），按 `[核心机制] + [技术巧思] → [解决的核心痛点/目标能力]` 结构提炼，严禁使用 `Method = A + B + C` 堆砌专有名词。
 2. **Contribution**：紧随 Takeaway 之后，以中文严格单句定性论文的核心学术价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
 3. **Motivation**：以中文阐述 `**Core Problem**:`（底层能力鸿沟与痛点）与 `**Why Existing Routes Fail**:`（现有替代方案缺陷），仅标签为英文，内容必须保持中文，不提前剧透具体方案。
 4. **Core Mechanism**：
