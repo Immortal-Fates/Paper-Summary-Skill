@@ -51,31 +51,28 @@ Follow this exact section order:
 
 * Core Mechanism
 
-  * **Core Framework: <Framework Name>**：单句概括从核心问题转向该框架的完整闭环，并明确指出系统由哪几个核心部分/阶段组成。
+  * **Core Framework: <Framework Name>**：单句概括完整闭环并明确列出系统由哪几部分组成（如 Encoder-Decoder、Learnable Codebook 及 Prior 阶段）。
 
     ![Framework](assets/<note-file-base>.assets/framework.png)
 
     > [!NOTE]
-    > **Figure 1. <Original caption or concise overview>.** **Top: Rollout Stage** 说明各分区作用；**Left: Architecture** 说明闭环连接关系。
+    > **Figure 1. <Original caption or concise overview>.** **Left: Architecture** 说明前向与反向信息流；**Right: Embedding Space** 说明特征与码字更新。
 
     $$
-    \mathcal{L} = \mathcal{L}_{\text{recon}} + \mathcal{L}_{\text{codebook}} + \beta \mathcal{L}_{\text{commit}}
+    \mathcal L = \underbrace{-\log p_\theta(x\mid z_q)}_{\mathcal L_{\mathrm{rec}}} + \underbrace{\|\operatorname{sg}[z_e]-z_q\|_2^2}_{\mathcal L_{\mathrm{codebook}}} + \underbrace{\beta\|z_e-\operatorname{sg}[z_q]\|_2^2}_{\mathcal L_{\mathrm{commit}}}
     $$
 
-    单句拆解总目标各分项分别优化哪些参数/模块，并讲明梯度截断（如 $\text{sg}$）或正则项在物理上防止了何种具体退化（如特征发散或码本坍塌）。
+    单句说明总损失分工：第 1 项优化重构，第 2 项更新 Codebook 码字，第 3 项以 Commitment loss 防止连续表征在潜空间发散漂移。
 
-    * **Component: <Component Name>**：单句交代表征数据形态（如 $H \times W \times D$ 空间网格或序列 Token）与具体数据流职责。
-    * **Component: <Component Name & Solved Bottleneck>**：单句讲透该组件的具体算子实现（如前向输出与反向梯度的具体流动公式），以及如何解决该环节的技术死穴。
-
-      ![Mechanism figure](assets/<note-file-base>.assets/mechanism.png)
-
-      > [!NOTE]
-      > **Figure 2. <Original caption or concise overview>.** 说明该图呈现的局部机制与信息流。
-
-    * **Component: <Component Name>**：单句说明另一核心组成部分的设计巧思与运作机理。
+    * **Learnable State: <Codebook / Memory>**：明确定义参数集合与超参数（如 $\mathcal C=\{e_1,\dots,e_K\}, e_k\in\mathbb R^D$），说明 $K$（词表容量）与 $D$（通道对齐）的物理意义及更新机制。
+    * **Component: <Quantizer / Operator with Trick>**：
+      * **Forward Operation**: 给出空间网格坐标 $(i, j)$ 的具体匹配算子（如 $k^*=\arg\min_k \|z_e^{(i,j)}-e_k\|_2^2 \implies z_q^{(i,j)}=e_{k^*}$）。
+      * **Backward Trick (STE)**: 解释直通算子（如 $\operatorname{sg}(x)=x, \partial \operatorname{sg}/\partial x=0 \implies \partial z_q/\partial z_e \approx I$）如何无损复制梯度绕过不可导阶跃。
+    * **Component: <Decoder / Downstream Modeling>**：单句说明从量化离散网格恢复高维连续信号的解码职责。
+    * **Stage 2: <Autoregressive Prior / Generation>**：说明冻结离散特征后如何用自回归模型拟合联合概率分布解决 Next-Token 预测。
 
       $$
-      \text{Essential local formula}
+      \underbrace{z\sim p_\psi(z)}_{\text{Prior 采样 Tokens}} \longrightarrow \underbrace{e_z}_{\text{Codebook Lookup}} \longrightarrow \underbrace{\hat x=D_\theta(e_z)}_{\text{Decoder 还原图像}}
       $$
 
 * Pipeline
@@ -152,17 +149,19 @@ Follow this exact section order:
 - Do NOT introduce the proposed framework name, solution, or architecture here; keep motivation pure.
 
 ### Core Mechanism
-- Start immediately with the central framework or method, connecting from the capability gap in `Motivation`. Every bullet must be strictly **1 single sentence** (25–45 characters).
+- Start immediately with the central framework or method, connecting from the capability gap in `Motivation`.
 - **System / Multi-module papers**:
-  - **Framework overview with explicit decomposition**: The opening `**Core Framework: <Framework Name>**` bullet must state the complete operating loop AND explicitly declare what constituent parts/modules/stages make up the system (e.g., "整体由 A、B、C 三部分组成").
-  - **Explicit data shape & spatial granularity**: Explicitly specify the data representation format and granularity (e.g., spatial grid $H \times W \times D$ with per-location vector matching, discrete token sequences, or latent vectors). Never leave data format ambiguous.
-  - **Operational mechanism inside components**: Each `**Component: <Name>**` bullet must articulate its concrete mathematical or algorithmic operation (e.g., explain *how* STE copies decoder gradients $\nabla_{z_q}\mathcal{L}$ directly to encoder output $z_e$, rather than vaguely saying "solves non-differentiability"). Ban empty filler phrases like "提取高层表征" or "有效压缩信息瓶颈".
-  - **Loss function parameter update mechanics**: When explaining multi-term objectives/losses, explicitly articulate **which term updates which parameters/modules** and the physical purpose of gradient stops (e.g., $\text{sg}$) or regularizers (e.g., preventing representation drift).
-  - Embed overview figure and global objective formula directly under `Core Framework`; embed local mechanism figures and sub-formulas under their corresponding `Component` bullets.
+  - **Framework overview with explicit decomposition**: State the complete operating loop and explicitly declare all constituent modules, states, and stages in the opening `**Core Framework: <Framework Name>**` bullet (e.g., "整体由 Encoder-Decoder、Learnable Codebook 及 Prior 阶段组成").
+  - **Self-annotating multi-term objectives**: For multi-term losses/objectives, **strictly use `\underbrace{...}_{Label}` in LaTeX** to visually bind each term to its name (e.g., $\mathcal{L}_{\mathrm{rec}}$, $\mathcal{L}_{\mathrm{codebook}}$, $\mathcal{L}_{\mathrm{commit}}$), followed by a single sentence explaining parameter update roles and counterfactual stabilization purposes (e.g., why $\text{sg}$ is necessary to prevent representation drift).
+  - **Learnable parameter stores as first-class entities**: If the model maintains a Codebook, memory bank, or discrete dictionary, define it explicitly as a first-class bullet (e.g., `**Learnable State: <Codebook / Memory>**`), stating its mathematical notation ($\mathcal C=\{e_1,\ldots,e_K\}, e_k\in\mathbb R^D$), dictionary capacity ($K$), channel dimension ($D$), and update dynamics (loss pulling vs EMA). Never reduce it to a passive lookup table.
+  - **Atomic micro-tree breakdown for operators**: Deconstruct complex components into clean, indented sub-bullets:
+    1. *Forward operation with explicit tensor coordinates*: State exact per-location matching (e.g., $u=z_e^{(i,j)}$ and argmin assignment $z_q^{(i,j)}=e_{k^*}$) rather than vague mapping.
+    2. *Backward implementation trick*: Provide exact operator equations (e.g., STE gradient identity $\partial z_q / \partial z_e \approx I$ via $z_e + \text{sg}[z_q - z_e]$) explaining how non-differentiable bottlenecks are bypassed.
+  - **Inference pipeline closure**: For generative or multi-stage models, explicitly explain downstream sampling, concluding with a single-line chained arrow equation ($\text{Prior Sampling} \longrightarrow \text{Lookup} \longrightarrow \text{Decode}$).
 - **Non-system / Single-mechanism or Theoretical papers**:
   - Do NOT force the `Core Framework` / `Component` hierarchy onto single-mechanism, empirical, or purely mathematical papers.
   - Use a clean flat list of bullets: `**Core Formulation: <Name>**` (or `**Core Mechanism: <Name>**`) for the primary objective/algorithm, followed by `**Theoretical Property: <Name>**` (or `**Key Derivation: <Name>**`) for theoretical guarantees, convergence bounds, or analytical properties.
-- **Technical proper nouns strictly in English**: Component names, modules, and algorithm mechanisms (e.g., `Encoder`, `Decoder`, `Vector Quantizer`, `Codebook`, `Straight-Through Estimator`, `Prior`) must be written in English. Do NOT translate them into localized Chinese (e.g., use "Vector Quantizer", not "离散码本量化器").
+- **Technical proper nouns strictly in English**: Component names, modules, and algorithm mechanisms (`Encoder`, `Decoder`, `Vector Quantizer`, `Codebook`, `STE`, `Prior`) must be written in English. Do NOT translate them into localized Chinese.
 - Embed figures and formulas directly below the specific bullet they explain. Do not create separate "Math" or "Figure" sections.
 
 ### Pipeline
@@ -220,7 +219,7 @@ Before completing the summary, verify every invariant:
 2. **Strict single-sentence brevity**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (25–45 characters, no semicolon chaining, no run-on clauses, high insight density).
 3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single sentence classifying primary value).
 4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
-5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts with `Core Framework` (stating the closed loop and explicitly listing constituent parts), nests `Component:` bullets explaining concrete operational mechanisms (data shape, gradient flow, and parameter update targets without empty filler); non-system papers use `Core Formulation` and `Theoretical Property`. Followed immediately by `Pipeline` before `Experiment`.
+5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts with `Core Framework` (stating the closed loop and explicitly listing constituent parts), uses self-annotating `\underbrace` for multi-term losses, defines learnable states (Codebook) as first-class entities, deconstructs operators into forward/backward atomic sub-bullets (with exact coordinates and STE formulas), and concludes generative pipelines with a chained inference arrow equation. Followed immediately by `Pipeline` before `Experiment`.
 6. **Micro-mechanism transparency**: Ban abstract hand-waving (e.g., "提取特征", "压缩瓶颈"). Point out concrete mathematical operators (e.g., STE gradient formula), tensor shapes ($H \times W \times D$), and counterfactual loss purposes (what failure is prevented).
 7. **Direct autonomous execution**: Immediately execute without scope/depth confirmation prompts.
 8. **Language separation**: Only `Takeaway` is in English. Across all other sections, only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
