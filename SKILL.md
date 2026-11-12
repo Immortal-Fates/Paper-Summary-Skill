@@ -1,17 +1,17 @@
 ---
 name: paper-summary
-description: Summarize a paper into a concise, insight-led Typora-friendly markdown note with Takeaway, explicit research problem, a core framework before its supporting designs, mechanism figures and formulas, experimental evidence, a Mermaid pipeline, critical thinking, local assets, and verified citation metadata.
+description: Summarize a paper into a concise, insight-led Typora-friendly markdown note with Takeaway, Contribution, Motivation, Core Mechanism, Mermaid Pipeline, Experiment, and Critical Thinking.
 ---
 
 ## What I do
 
 This skill turns a reliable paper link into a structured, insight-led paper summary in Typora-friendly markdown.
 
-Summaries are written in Chinese-dominant mixed-language style, except `Takeaway` which is strictly English-only. Explanations first identify the unresolved research problem, then present the central framework or core formulation, followed by supporting mechanisms with nested figures and formulas, experimental logic and evidence tables, a Mermaid pipeline, and deep critical evaluation.
+Summaries are written in Chinese-dominant mixed-language style, except `Takeaway` which is strictly English-only. The note opens with an English Takeaway and Chinese Contribution for immediate high-level orientation, defines the unresolved problem in Motivation, establishes the Core Mechanism followed immediately by its runtime Mermaid Pipeline, delivers experimental evidence, and concludes with rigorous Critical Thinking.
 
 ## Core conventions
 
-- **Strict 1-sentence per point rule**: Every bullet point across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **exactly 1 concise sentence** (严格单句，中文约 25–45 字，直接陈述本质因果，严禁分号拼接、复合从句或无信息量套话).
+- **Strict 1-sentence per point rule**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **exactly 1 concise sentence** (严格单句，中文约 25–45 字，直接陈述本质因果，严禁分号拼接、复合从句或无信息量套话).
 - **English captions with Chinese explanations**: All bullet captions must be in English Title Case (e.g. `**Core Problem**:`, `**Core Framework**:`, `**Key Component**:`, `**Failure Mode**:`); the explanatory prose remains concise Chinese-dominant mixed-language.
 - **Typora list hierarchy**: Main summary sections are list items (`* Section Name` or `- Section Name`) under the note topic. All child content (prose, formulas, images, `> [!NOTE]` callouts, and Mermaid diagrams) must be indented by 2 spaces under its owning bullet to fold correctly in Typora.
 - **Preserve existing scaffolding**: If editing an existing note file, preserve existing frontmatter, title, TOC, and unrelated note content.
@@ -20,11 +20,12 @@ Summaries are written in Chinese-dominant mixed-language style, except `Takeaway
 
 Follow this exact section order:
 1. `Takeaway`
-2. `Motivation`
-3. `Core Mechanism`
-4. `Experiment`
+2. `Contribution`
+3. `Motivation`
+4. `Core Mechanism`
 5. `Pipeline`
-6. `Critical Thinking`
+6. `Experiment`
+7. `Critical Thinking`
 
 ```markdown
 **<Full Paper Title>**. <Author 1, Author 2, Author 3 | First Author et al.>. **<Venue>**, **<Year>**. [(Paper)](URL) [(Project)](URL) (Citations __N__)
@@ -32,6 +33,10 @@ Follow this exact section order:
 * Takeaway
 
   Method = Primary Framework + Enabling Module A + Enabling Module B + Key Loss
+
+* Contribution
+
+  一句话严格定性论文核心学术价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
 
 * Motivation
 
@@ -66,6 +71,23 @@ Follow this exact section order:
       \text{Essential formula}
       $$
 
+* Pipeline
+
+  ```mermaid
+  flowchart LR
+      Input[Observe request] --> Model[Core predictor]
+      Model --> Gate{Confidence threshold met?}
+      Gate -->|Accepted| Result[Return prediction]
+      Gate -->|Fallback| Review[Route to human]
+
+      classDef process fill:#EAF2F8,stroke:#1F618D,stroke-width:2px,color:#102A43
+      classDef decision fill:#FFF2CC,stroke:#A16207,stroke-width:2px,color:#3F2A00
+      classDef future fill:#FCE8E6,stroke:#C5221F,stroke-width:2px,color:#5F1A17
+      class Input,Model process
+      class Gate decision
+      class Review future
+  ```
+
 * Experiment
 
   ```mermaid
@@ -88,26 +110,8 @@ Follow this exact section order:
     > [!NOTE]
     > **Table 1. <Original caption or concise overview>.** 说明对比基线、关键提升幅度及解释边界。
 
-* Pipeline
-
-  ```mermaid
-  flowchart LR
-      Input[Observe request] --> Model[Core predictor]
-      Model --> Gate{Confidence threshold met?}
-      Gate -->|Accepted| Result[Return prediction]
-      Gate -->|Fallback| Review[Route to human]
-
-      classDef process fill:#EAF2F8,stroke:#1F618D,stroke-width:2px,color:#102A43
-      classDef decision fill:#FFF2CC,stroke:#A16207,stroke-width:2px,color:#3F2A00
-      classDef future fill:#FCE8E6,stroke:#C5221F,stroke-width:2px,color:#5F1A17
-      class Input,Model process
-      class Gate decision
-      class Review future
-  ```
-
 * Critical Thinking
 
-  * **Contribution**: 严格单句判断论文核心价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
   * **Pros**:
     * 纯架构与原理优势（严格单句，不复述实验结果）。
     * **Paradigm Demonstration**：（仅限里程碑论文）说明示范的范式及后续采纳的具体代表工作。
@@ -127,6 +131,10 @@ Follow this exact section order:
 - **Strictly English**: Plain-text compositional formula (`Method = Framework + Component A + Component B`) or 1–2 concise English sentences.
 - Never wrap in backticks, quotes, or code fences. No Chinese allowed in this section.
 
+### Contribution
+- **Strictly 1 concise sentence in Chinese**: Placed directly after `Takeaway` for immediate executive-level orientation.
+- Classify the paper's primary value as a new challenge, new solution, or new research paradigm within verified evidence bounds. Never claim broader impact than demonstrated.
+
 ### Motivation
 - **Content strictly in Chinese**: Only the bold captions (`**Core Problem**:`, `**Why Existing Routes Fail**:`) are in English Title Case. The explanation body must be written in concise **Chinese-dominant** prose. Never write English paragraphs in Motivation.
 - Strictly 2 concise bullets, each strictly **1 single sentence** (25–45 characters):
@@ -144,25 +152,26 @@ Follow this exact section order:
   - Use a clean flat list: `**Core Formulation: <Name>**` (or `**Core Mechanism: <Name>**`) for the primary objective/algorithm, followed by `**Theoretical Property: <Name>**` (or `**Key Derivation: <Name>**`).
 - Embed figures and formulas directly below the specific bullet they explain. Do not create separate "Math" or "Figure" sections.
 
-### Experiment
-- Open with a compact Mermaid research-logic overview diagram showing the study evidence chain (`Problem -> Learnability -> Predictability -> Analysis/Boundaries`).
-- Merge all discussion of the same experiment/benchmark into one child bullet (strictly 1 single sentence combining setup and quantitative conclusion).
-- Follow each experiment bullet with the principal cropped result table screenshot and its single `> [!NOTE]` callout. Never duplicate the same experiment across benchmarks.
-
 ### Pipeline
+- Placed immediately after `Core Mechanism` as the runtime/dynamic execution view of the method.
 - **Mermaid flowchart only**: Do NOT write numbered text lists.
 - Default to `flowchart LR` for readable horizontal layout in Typora; use `flowchart TD` only if strictly hierarchical.
 - Diagram the actual evaluated mechanism, not idealized lifecycles. Use action-oriented labels and named branches (`Accepted`, `Fallback`, not bare `Yes`/`No`).
 - Distinguish evaluated modules from proposed/future integration using explicit `classDef` styles.
 
+### Experiment
+- Placed immediately after `Pipeline` to evaluate the mechanism established above.
+- Open with a compact Mermaid research-logic overview diagram showing the study evidence chain (`Problem -> Learnability -> Predictability -> Analysis/Boundaries`).
+- Merge all discussion of the same experiment/benchmark into one child bullet (strictly 1 single sentence combining setup and quantitative conclusion).
+- Follow each experiment bullet with the principal cropped result table screenshot and its single `> [!NOTE]` callout. Never duplicate the same experiment across benchmarks.
+
 ### Critical Thinking
-- Merge all critical insights into this single section across 6 dimensions (each bullet strictly 1 concise sentence):
-  1. `**Contribution**`: Exactly 1 sentence classifying the value as a new challenge, new solution, or new paradigm within verified evidence bounds.
-  2. `**Pros**`: Architectural/methodological strengths. Include `**Paradigm Demonstration**` only for verified milestone papers with cited successors.
-  3. `**Cons**`: Concrete failure modes under `**Failure Mode: <Name>**:` (breakdown conditions, pathological cases, synchronization/sample divergence).
-  4. `**Trade-offs**`: What was sacrificed (latency, compute, autonomy) and whether the exchange is practically justified.
-  5. `**Empirical Support**`: Fairness of baselines, synthetic vs realistic benchmarks, and ablation rigor.
-  6. `**Future Directions**`: The logical next bottleneck to resolve.
+- Pure reflection and critical analysis across 5 dimensions (each bullet strictly 1 concise sentence):
+  1. `**Pros**`: Architectural/methodological strengths. Include `**Paradigm Demonstration**` only for verified milestone papers with cited successors.
+  2. `**Cons**`: Concrete failure modes under `**Failure Mode: <Name>**:` (breakdown conditions, pathological cases, synchronization/sample divergence).
+  3. `**Trade-offs**`: What was sacrificed (latency, compute, autonomy) and whether the exchange is practically justified.
+  4. `**Empirical Support**`: Fairness of baselines, synthetic vs realistic benchmarks, and ablation rigor.
+  5. `**Future Directions**`: The logical next bottleneck to resolve.
 - Do NOT recap quantitative experiment results already covered in `Experiment`.
 
 ## Formatting and asset rules
@@ -194,12 +203,12 @@ Follow this exact section order:
 
 Before completing the summary, verify every invariant:
 1. **Metadata line**: Begins with full paper title in bold; author list truncated to `First Author et al.` when > 3 authors; contains mandatory `(Citations __N__)` or `(Citations __unknown__)`.
-2. **Strict single-sentence brevity**: Every bullet point across `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (25–45 characters, no semicolon chaining, no run-on clauses, high insight density).
-3. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
-4. **Direct core mechanism**: `Core Mechanism` starts directly with the central framework (`Core Framework`) and nested components (`Key Component`), or with `Core Formulation` for non-system papers.
-5. **Language separation**: Only `Takeaway` is in English. Across all other sections (`Motivation`, `Core Mechanism`, `Experiment`, `Critical Thinking`), only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
-6. **Takeaway**: Strictly English compositional formula or 1–2 sentences, without quotes, code fences, or backticks.
-7. **Mermaid diagrams**: `Experiment` begins with the research-logic overview diagram; `Pipeline` is an action-specific flowchart with styled node classes.
-8. **Figures, tables & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, immediately followed by a `> [!NOTE]` with English visual anchors. Principal result table is visually embedded.
-9. **Delimiters**: Math uses only `$...$` and `$$...$$`; no raw wiki-links (`[[...]]`).
-10. **Typora foldability**: All child content is indented with 2 spaces under its owning list item.
+2. **Strict single-sentence brevity**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (25–45 characters, no semicolon chaining, no run-on clauses, high insight density).
+3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single sentence classifying primary value).
+4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
+5. **Direct core mechanism & Pipeline flow**: `Core Mechanism` starts directly with the central framework/formulation, followed immediately by `Pipeline` (Mermaid flowchart) as the runtime execution view before `Experiment`.
+6. **Language separation**: Only `Takeaway` is in English. Across all other sections, only the bold captions/labels are in English Title Case, while all body explanations must be strictly in Chinese-dominant prose (never write English sentences in `Motivation`).
+7. **Takeaway**: Strictly English compositional formula or 1–2 sentences, without quotes, code fences, or backticks.
+8. **Mermaid diagrams**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram.
+9. **Figures, tables & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, immediately followed by a `> [!NOTE]` with English visual anchors. Principal result table is visually embedded.
+10. **Delimiters & foldability**: Math uses only `$...$` and `$$...$$`; all child content is indented with 2 spaces under its owning list item.
