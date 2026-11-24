@@ -12,12 +12,12 @@ Summaries are written in Chinese-dominant mixed-language style across all sectio
 ## Core conventions
 
 - **Source grounding & anti-fabrication**: Every equation, symbol, complexity bound, hardware spec, and numerical claim must come directly from the paper's ground-truth source (`source/` LaTeX or PDF). Never invent synthetic `\underbrace` equations, fake summations, or unverified metrics just to fill a template slot; when the paper states an inequality, scaling bound, or recurrence instead of a multi-term loss, present the paper's actual formulation faithfully.
-- **Strict 1-sentence per point rule**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **exactly 1 concise sentence** (target ~30–60 Chinese characters, stating underlying causality directly; no semicolon-chained compound sentences or vacuous filler). Never drop essential operators, tensor shapes, or quantitative bounds merely to force a shorter character count.
+- **Strict 1-sentence per point rule & no meta-prefixes**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` must be strictly limited to **exactly 1 concise sentence** (target ~30–60 Chinese characters, stating underlying causality directly; no semicolon-chained compound sentences or vacuous filler). Never drop essential operators, tensor shapes, or quantitative bounds merely to force a shorter character count, and never leak meta-instruction prefixes into the note (e.g., strictly forbid phrases like `单句说明……：`, `一句话概括……：`, `单句总结……：`).
 - **On-demand `>` explanation blocks (Self-contained readability)**: Keep main bullets to 1 crisp sentence for fast scanning, and place an indented plain `>` blockquote underneath **only when a reader unfamiliar with the paper faces a conceptual leap or hidden derivation** (such as *why* memory scales as $2bns^2$ in `Motivation`, how an inequality like $c \ge F/B$, `Online Softmax` rescaling, or backward recomputation works in `Core Mechanism`, or why a failure mode occurs in `Critical Thinking`). Explain in plain, accessible Chinese with simple source-grounded math or analogies, and prefer three high-clarity techniques inside `>` when explaining streaming or multi-step compute:
   1. *Concrete toy-dimension sandbox*: Anchor abstract dimensions on small concrete numbers (explicitly labeled as an illustrative example, e.g., $P=4, s=4096, d=64, c=1024$) so tensor shapes and memory counts are immediately concrete.
   2. *Step-by-step recurrence (`**Step 1**`, `**Step 2**`, ...)*: Break iterative operators and backward recomputation into short labeled steps with `←` update equations (one clean `$$...$$` per step inside `>`) instead of packing multiple recurrences into dense prose or one wide line.
   3. *Buffer allocation & reuse lifecycle*: For memory bounds (e.g., $6bch$), categorize tensors by lifecycle—static resident states, async double-buffers, and on-chip scratchpad buffers overwritten/discarded after each step.
-  **Do NOT force `>` under every bullet**: omit it on `Takeaway`, `Contribution`, `Experiment` (already paired with `> [!NOTE]`), and self-explanatory bullets; always separate a plain `>` block from `> [!NOTE]` so Markdown never merges them.
+  **Selective `>` scope (do NOT force under every bullet)**: omit `>` on `Takeaway`, `Contribution`, `Experiment` (already paired with `> [!NOTE]`), and routine/off-the-shelf components (`Encoder`, standard `MLP`, etc.). However, **core or novel `Component`s proposed by the paper are NOT exempted as self-explanatory**: unpack them via an indented equation/operator breakdown or a `>` block detailing the input → transformation → output flow and design rationale; always separate a plain `>` block from `> [!NOTE]` so Markdown never merges them.
 - **English captions with Chinese explanations**: All bullet captions must be in English Title Case (e.g., `**Core Problem**:`, `**Core Framework**:`, `**Component**:`, `**Failure Mode**:`); the explanatory prose remains concise Chinese-dominant mixed-language.
 - **Preserve English for technical proper nouns**: All technical terms, module names, architecture components, algorithms, loss functions, parallelism strategies, benchmark names, and core theoretical constructs (e.g., `Encoder`, `Decoder`, `Vector Quantizer`, `Codebook`, `Straight-Through Estimator (STE)`, `Posterior Collapse`, `Self-Attention`, `FeedForward`, `Online Softmax`, `Tensor / Sequence / Data Parallelism`, `Key-Value Block`, `Causal Mask`, `Full / Mixed Precision`, `Diffusion`, `Latent Space`) must strictly remain in English throughout the text. Never translate them into awkward or localized Chinese phrases (e.g., strictly use "Vector Quantizer", never "离散码本量化器"; use "Encoder / Decoder", never "编码器 / 解码器"; use "Blockwise FeedForward" / "Tensor Parallelism", never "分块前馈网络" / "张量并行").
 - **Micro-mechanism transparency**: Ban abstract, vacuous filler phrases (such as "提取高层表征", "压缩信息瓶颈", "通过优化实现目标", "实现无损全局局部累加"). Every mechanism must penetrate to the **paper-faithful operator and physical-boundary level**:
@@ -48,36 +48,39 @@ Follow this exact section order:
 
 * Contribution
 
-  一句话严格定性论文核心学术价值归属（新 challenge、新 solution 或新 research paradigm），且与论文实际证据范围一致。
+  <用 1 句中文直接定性论文核心学术价值归属（新 challenge、新 solution 或新 research paradigm），与实际证据范围一致。>
 
 * Motivation
 
-  * **Core Problem**：以精炼中文单句（约30–60字）直击底层能力鸿沟与核心痛点；严禁描述论文已达成的方案。
+  * **Core Problem**: <以约 30–60 字中文直击底层能力鸿沟与核心痛点；严禁描述论文已达成的方案。>
 
-    > 按需补充通俗解释、直觉类比或简短公式推导（仅在存在理解门槛或隐藏推导时添加，避免每条无差别复读）。
-  * **Why Existing Routes Fail**：以精炼中文单句（约30–60字）说明现有替代路线为何在机理上无法提供该能力。
+    > <按需补充通俗解释、直觉类比或简短公式推导（仅在存在理解门槛或隐藏推导时添加，避免无差别复读）。>
+  * **Why Existing Routes Fail**: <以约 30–60 字中文说明现有替代路线为何在机理上无法提供该能力。>
 
 * Core Mechanism
 
-  * **Core Framework: <Framework Name>**：单句概括完整闭环并明确列出系统由哪几部分组成（如 Encoder-Decoder、Learnable Codebook 及 Prior 阶段）。
+  * **Core Framework: <Framework Name>**: <概括完整闭环，并明确列出系统由哪几部分组成（如 Encoder-Decoder、Learnable Codebook 及 Prior 阶段）。>
 
     ![Framework](assets/<note-file-base>.assets/framework.png)
 
     > [!NOTE]
-    > **Figure 1. <Original caption or concise overview>.** **Left: Architecture** 说明前向与反向信息流；**Right: Embedding Space** 说明特征与码字更新。
+    > **Figure 1. <Original caption or concise overview>.** **Left: Architecture** <说明前向与反向信息流>；**Right: Embedding Space** <说明特征与码字更新>。
 
     $$
     \mathcal L = \underbrace{-\log p_\theta(x\mid z_q)}_{\mathcal L_{\mathrm{rec}}} + \underbrace{\|\operatorname{sg}[z_e]-z_q\|_2^2}_{\mathcal L_{\mathrm{codebook}}} + \underbrace{\beta\|z_e-\operatorname{sg}[z_q]\|_2^2}_{\mathcal L_{\mathrm{commit}}}
     $$
 
-    单句说明总损失分工：第 1 项优化重构，第 2 项更新 Codebook 码字，第 3 项以 Commitment loss 防止连续表征在潜空间发散漂移。
+    第 1 项优化重构质量，第 2 项将 Codebook 码字拉向连续编码输出，第 3 项通过 Commitment loss 防止连续表征在潜空间发散漂移。
 
-    * **Learnable State: <Codebook / Memory>**：明确定义参数集合与超参数（如 $\mathcal C=\{e_1,\dots,e_K\}, e_k\in\mathbb R^D$），说明 $K$（词表容量）与 $D$（通道对齐）的物理意义及更新机制。
-    * **Component: <Quantizer / Operator with Trick>**：
-      * **Forward Operation**: 给出空间网格坐标 $(i, j)$ 的具体匹配算子（如 $k^*=\arg\min_k \|z_e^{(i,j)}-e_k\|_2^2 \implies z_q^{(i,j)}=e_{k^*}$）。
-      * **Backward Trick (STE)**: 解释直通算子（如 $\operatorname{sg}(x)=x, \partial \operatorname{sg}/\partial x=0 \implies \partial z_q/\partial z_e \approx I$）如何无损复制梯度绕过不可导阶跃。
-    * **Component: <Decoder / Downstream Modeling>**：单句说明从量化离散网格恢复高维连续信号的解码职责。
-    * **Stage 2: <Autoregressive Prior / Generation>**：说明冻结离散特征后如何用自回归模型拟合联合概率分布解决 Next-Token 预测。
+    * **Learnable State: <Codebook / Memory>**: <定义参数集合与超参数（如 $\mathcal C=\{e_1,\dots,e_K\}, e_k\in\mathbb R^D$），说明 $K$（词表容量）与 $D$（通道对齐）的物理意义及更新机制。>
+    * **Component: <Core / Novel Module With Operator Trick>**: <1 句概括该核心模块在整套闭环中的职责与作用边界。>
+      * **Forward Operation**: <给出空间网格坐标 $(i, j)$ 或具体张量的匹配/变换算子（如 $k^*=\arg\min_k \|z_e^{(i,j)}-e_k\|_2^2 \implies z_q^{(i,j)}=e_{k^*}$）。>
+      * **Backward Trick (STE)**: <解释直通算子（如 $\operatorname{sg}(x)=x, \partial \operatorname{sg}/\partial x=0 \implies \partial z_q/\partial z_e \approx I$）如何复制梯度绕过不可导阶跃。>
+    * **Component: <Core / Novel Module Requiring Explanation>**: <1 句概括该核心模块的输入输出形态与核心计算职责。>
+
+      > <核心/新颖 Component 必须附带机理展开：写清输入 → 算子变换 → 输出的张量/图结构变化、对应公式如何计算，以及为何采用该设计（例如使用沙盘维度或分步递推）。>
+    * **Component: <Standard Backbone / Routine Module>**: <常规或标准组件仅保留 1 句职责与接口说明，不强行附带冗余解释块。>
+    * **Stage 2: <Autoregressive Prior / Generation>**: <说明冻结离散特征后如何用自回归模型拟合联合概率分布解决 Next-Token 预测。>
 
       $$
       \underbrace{z\sim p_\psi(z)}_{\text{Prior 采样 Tokens}} \longrightarrow \underbrace{e_z}_{\text{Codebook Lookup}} \longrightarrow \underbrace{\hat x=D_\theta(e_z)}_{\text{Decoder 还原图像}}
@@ -115,26 +118,26 @@ Follow this exact section order:
       Explain -.->|"Revises assumptions"| Learn
   ```
 
-  * **<Experiment or Benchmark Name>**：以精炼单句总结实验设置与核心定量结论（约30–60字），随后放置主要结果表截图（严禁在下方复读纯文本表格）。
+  * **<Experiment or Benchmark Name>**: <以精炼单句总结实验设置与核心定量结论（约 30–60 字），随后放置主要结果表截图；严禁在下方复读纯文本表格。>
 
     ![Principal result table](assets/<note-file-base>.assets/main-results.png)
 
     > [!NOTE]
-    > **Table 1. <Original caption or concise overview>.** 说明对比基线、关键提升幅度及解释边界。
+    > **Table 1. <Original caption or concise overview>.** <说明对比基线、关键提升幅度及解释边界。>
 
 * Critical Thinking
 
   * **Pros**:
-    * 纯架构与原理优势（严格单句，不复述实验结果）。
-    * **Paradigm Demonstration**：（仅限里程碑论文）说明示范的范式及后续采纳的具体代表工作。
+    * <纯架构与原理优势（严格单句，不复述实验结果）。>
+    * **Paradigm Demonstration**: <（仅限里程碑论文）说明示范的范式及后续采纳的具体代表工作。>
   * **Cons**:
-    * **Failure Mode: <Name>**：说明理论假设破裂、病态场景或极端环境下的退化机制。
+    * **Failure Mode: <Name>**: <说明理论假设破裂、病态场景或极端环境下的退化机制。>
   * **Trade-offs**:
-    * 指出为了获得性能优势所牺牲的成本（如算力、通信、灵活性），评估该置换在实际中是否合理有益。
+    * <指出为了获得性能优势所牺牲的成本（如算力、通信、灵活性），评估该置换在实际中是否合理有益。>
   * **Empirical Support**:
-    * 评估评测基线是否公正充足、是否存在消融盲区或评测环境合成化偏差（不复述数值结果）。
+    * <评估评测基线是否公正充足、是否存在消融盲区或评测环境合成化偏差（不复述数值结果）。>
   * **Future Directions**:
-    * 指出该方向下一个亟待解决的瓶颈或关键突破口。
+    * <指出该方向下一个亟待解决的瓶颈或关键突破口。>
 ```
 
 ## Section specifications
@@ -162,7 +165,9 @@ Follow this exact section order:
   - **Framework overview with explicit decomposition**: State the complete operating loop and explicitly declare all constituent modules, states, and stages in the opening `**Core Framework: <Framework Name>**` bullet (e.g., "整体由 Encoder-Decoder、Learnable Codebook 及 Prior 阶段组成").
   - **Self-annotating multi-term objectives (only when the paper defines a multi-term loss)**: Use `\underbrace{...}_{Label}` in LaTeX to bind each actual loss term in the paper (e.g., $\mathcal{L}_{\mathrm{rec}}$, $\mathcal{L}_{\mathrm{codebook}}$, $\mathcal{L}_{\mathrm{commit}}$), followed by 1 sentence explaining parameter update roles and counterfactual stabilization purposes (e.g., why $\text{sg}$ prevents representation drift).
   - **Learnable parameter stores (only when maintained by the model)**: If the model maintains a Codebook, memory bank, or discrete dictionary, define it as `**Learnable State: <Codebook / Memory>**` with notation ($\mathcal C=\{e_1,\ldots,e_K\}, e_k\in\mathbb R^D$), capacity ($K$), dimension ($D$), and update dynamics (loss pulling vs EMA).
-  - **Atomic micro-tree breakdown for operators (only when non-differentiable or multi-step forward/backward tricks exist)**: Deconstruct into indented `Forward Operation` (explicit tensor coordinates) and `Backward Trick` (exact gradient identity such as STE).
+  - **Core vs. routine `Component` explanation rule**: Keep every `Component` headline to 1 concise sentence, then branch by novelty:
+    - *Core / paper-proposed `Component`s* (e.g., a newly designed Graph Convolution, routing operator, attention variant, or decoder module): **must** provide concrete mechanism unpacking directly underneath—either via indented operator sub-bullets (`Forward Operation` / `Backward Trick` when non-differentiable or multi-step gradient tricks exist) or a source-grounded equation + `>` explanation block detailing input → transformation → output (tensor/graph shapes) and why the operator resolves the bottleneck.
+    - *Standard / off-the-shelf `Component`s* (e.g., vanilla `ResNet`, standard `MLP`, baseline `Tokenizer`): keep strictly to 1 concise sentence describing its interface role without bloated `>` blocks.
   - **Inference pipeline closure (only for generative or multi-stage models)**: Explain downstream sampling and conclude with a single-line chained arrow equation ($\text{Prior Sampling} \longrightarrow \text{Lookup} \longrightarrow \text{Decode}$).
 - **Pattern B — Systems / Parallelism / Architecture-scheduling papers** (e.g., `Ring Attention`, `FlashAttention`):
   - **Core Mechanism & Schedule**: State the exact partitioning, computation-communication overlap loop, and collaborative operators (e.g., `Online Softmax` statistical rescaling + `Blockwise FeedForward` + P2P `KV` ring primitives) without artificially splitting one unified schedule into 4 redundant `Component` bullets.
@@ -226,7 +231,7 @@ Follow this exact section order:
 
 Before completing the summary, verify every invariant:
 1. **Metadata line**: Begins with full paper title in bold; author list truncated to `First Author et al.` when > 3 authors; contains mandatory `(Citations __N__)` or `(Citations __unknown__)`.
-2. **Strict single-sentence brevity**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (target ~30–60 Chinese characters, no semicolon chaining, no run-on clauses, high insight density), without stripping required operators, tensor shapes, or quantitative bounds.
+2. **Strict single-sentence brevity & zero meta-prefixes**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (target ~30–60 Chinese characters, no semicolon chaining, no run-on clauses, high insight density), without stripping required operators, tensor shapes, or quantitative bounds, and contains zero meta-instruction prefixes (`单句说明……：`, `一句话概括……：`).
 3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single sentence classifying primary value).
 4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
 5. **Paper-faithful Core Mechanism & Pipeline flow**: Route `Core Mechanism` to the paper's actual type. Only use `\underbrace` multi-term objectives, `Learnable State`, forward/backward `STE` sub-bullets, and chained inference arrows when the paper itself defines those constructs; for systems/parallelism/algorithmic papers, present the paper's real governing thresholds, resource/complexity bounds, and core operators without forcing artificial component splits or fabricating equations. Followed immediately by `Pipeline` before `Experiment`.
@@ -238,4 +243,4 @@ Before completing the summary, verify every invariant:
 11. **Mermaid diagrams & no table duplication**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram. Never generate redundant text tables duplicating bullet sentences.
 12. **Figures, tables, Visual QA & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, visually inspected after cropping (table screenshots must include header + full data rows; multi-panel figures must be unclipped), and immediately followed by a `> [!NOTE]` whose English visual anchors and numbers match both the image and the paper source.
 13. **Delimiters & foldability**: Math uses only `$...$` and standalone `$$...$$` with blank lines before/after (never glued to bullet lines); all child content is indented with 2 spaces under its owning list item.
-14. **On-demand `>` explanation layer**: Add concise, source-grounded `>` explanation blocks (using toy-dimension examples, `**Step N**` `←` step-by-step recurrences, and buffer lifecycles where helpful) under bullets with conceptual leaps, streaming operators, or backward recomputation; omit `>` on `Takeaway`, `Contribution`, `Experiment` (use `> [!NOTE]` there), and self-explanatory points, keeping plain `>` separated from `> [!NOTE]`.
+14. **Selective `>` & core-Component explanation layer**: Every core/novel `Component` in `Core Mechanism` must carry an indented operator/equation breakdown or `>` explanation block (input → transformation → output and design rationale), while routine/off-the-shelf components stay 1 sentence; for `Motivation` and `Critical Thinking`, add `>` blocks on demand when conceptual leaps or hidden derivations exist (using toy-dimension examples, `**Step N**` `←` step-by-step recurrences, and buffer lifecycles where helpful). Omit `>` on `Takeaway`, `Contribution`, and `Experiment` (use `> [!NOTE]` there), and keep plain `>` separated from `> [!NOTE]`.
