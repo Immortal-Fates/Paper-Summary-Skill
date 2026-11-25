@@ -104,33 +104,26 @@ Follow this exact section order:
 
 * Pipeline
 
-  <!-- 形式 A：若论文包含 Algorithm 流程图或伪代码框，直接截图截取 -->
+  <!-- 形式 A：若论文包含 Algorithm 流程图或伪代码框，优先截图截取并附带说明 -->
   ![Algorithm Flowchart](assets/<note-file-base>.assets/algorithm.png)
 
   > [!NOTE]
   > **Algorithm 1. <Algorithm name or caption>.** **Input / State: ...** <说明初始状态与参数输入>；**Core Loop: ...** <说明核心循环迭代与更新逻辑>；**Output: ...** <说明返回结果与收敛边界>。
 
-  <!-- 形式 B：若论文无现成 Algorithm 截图，生成结构化高保真伪代码流程框（严禁使用粗粒度 Mermaid 方框连线） -->
-  ```text
-  Algorithm 1: <Runtime Execution or Generation Procedure Name>
-  ====================================================================================================
-  Input / Require:  <输入张量、超参数与初始条件，例如 Prompt x_0 in R^{B x L}, 采样步数 S, 词表大小 V>
-  Output / Ensure: <最终生成产物或收敛状态，例如 清晰生成序列 x_0 或对齐模型参数 theta*>
-  ----------------------------------------------------------------------------------------------------
-  1:  Initialize <初始变量与状态缓冲区分配，例如 全掩码序列 r_1 <- (M, ..., M), 清空 KV 缓存>
-  2:  Compute <离散时间网格，例如 t_k = 1 - k/S for k = 0, ..., S>
-  3:  for step k = 1 to S do
-  4:      Extract timesteps t <- t_{k-1}, s <- t_k
-  5:      Forward pass: Feed current sequence into Network to predict distribution P_theta(· | x_t)
-  6:      if <采样重掩码/判定分支> then
-  7:          Compute confidence scores c_i = max_v P_theta(x_0^i = v | x_t)
-  8:          Unmask Top-ranked positions and remask remaining positions with M
-  9:      else
-  10:         Update cache and state buffers
-  11:     end if
-  12: end for
-  13: return Clean sequence x_0 (strip padding and EOS tokens)
-  ====================================================================================================
+  <!-- 形式 B：若论文无现成 Algorithm 截图，使用结构化、高对比度样式的 Mermaid 流程图（所有节点文本必须用双引号包裹，严禁使用未转义的特殊字符） -->
+  ```mermaid
+  flowchart LR
+      Input["Observe Request x0"] --> Model["Core Predictor p_theta"]
+      Model --> Gate{"Confidence Threshold Met?"}
+      Gate -->|Accepted| Result["Return Prediction"]
+      Gate -->|Fallback| Review["Route to Refinement"]
+
+      classDef process fill:#EAF2F8,stroke:#1F618D,stroke-width:2px,color:#102A43
+      classDef decision fill:#FFF2CC,stroke:#A16207,stroke-width:2px,color:#3F2A00
+      classDef future fill:#FCE8E6,stroke:#C5221F,stroke-width:2px,color:#5F1A17
+      class Input,Model process
+      class Gate decision
+      class Result,Review future
   ```
 
 * Experiment
@@ -210,13 +203,10 @@ Follow this exact section order:
 
 ### Pipeline
 - Placed immediately after `Core Mechanism` as the runtime/dynamic execution view of the method.
-- **Algorithm Flowchart Priority & Mermaid Ban (算法框图优先，严禁使用粗粒度 Mermaid 替代)**:
+- **Algorithm Flowchart Priority & Safe Mermaid Fallback (算法框图优先，安全 Mermaid 兜底)**:
   1. *Priority 1 (Paper Algorithm Capture)*: When the paper contains an explicit Algorithm pseudocode box or flowchart (e.g. `Algorithm 1`), capture that diagram directly as an image asset under `Pipeline` accompanied by its paired `> [!NOTE]` detailing `Input / State`, `Core Loop`, and `Output`.
-  2. *Priority 2 (Structured Pseudocode Algorithm Box)*: When the paper lacks a ready-made image asset, **strictly forbid drawing crude Mermaid flowcharts**. Instead, synthesize a paper-faithful, high-density **Pseudocode Algorithm Box** in a standard ````text```` block. It must include:
-     - Header: `Algorithm X: [Procedure Name]` with clear boundary dividers;
-     - `Input / Require`: Explicit tensor dimensions, input prompts, schedules, and hyperparameters;
-     - `Output / Ensure`: Output generated sequences, final state caches, or updated parameters;
-     - Line numbers (`1: `, `2: `, ...), control flow (`for ... do`, `if ... then ... else`, `while ... do`), explicit assignment operators (`←`), sampling notation (`~`), and tensor update formulas.
+  2. *Priority 2 (Action-Specific Mermaid Flowchart)*: When the paper lacks a ready-made image asset, draw an action-specific Mermaid flowchart (`flowchart LR` for readable horizontal layout in Typora; `flowchart TD` only if strictly hierarchical).
+     - **Strict Mermaid Syntax Safety (严格语法安全律)**: All node label text MUST be explicitly enclosed in double quotes (e.g., `NodeID["Clean Node Text"]`) to prevent parse errors from colons, slashes, or commas; strictly avoid unescaped pipes (`|`) or standalone ampersands (`&`) inside node labels; use `classDef` styles (`process`, `decision`, `future`) with high-contrast palettes. Do NOT write numbered text lists.
 
 ### Experiment
 - Placed immediately after `Pipeline` to evaluate the mechanism established above.
@@ -281,7 +271,7 @@ Before completing the summary, verify every invariant:
 8. **Language policy**: Every section (including `Takeaway`) uses concise Chinese-dominant prose with English technical proper nouns preserved; only section headings and bold captions/labels are in English Title Case (never write English-only paragraphs or English-only `Takeaway`).
 9. **Proper nouns in English**: All technical terms, module names, parallelism strategies, architecture concepts, and benchmark names strictly preserve their standard English terminology; never translate them into localized Chinese (e.g., strictly use "Vector Quantizer", "Encoder / Decoder", "Blockwise FeedForward", "Online Softmax", "Tensor Parallelism").
 10. **Takeaway**: Exactly 1 Chinese-dominant mixed-language causal insight punchline (Mechanism + Innovation -> Solved Bottleneck), preserving English technical proper nouns without noun-stacking formulas (`Method = A + B + C`), quotes, code fences, or backticks.
-11. **Pipeline & diagrams**: `Pipeline` presents the runtime execution view. When the paper contains an Algorithm flowchart or pseudocode diagram, capture it directly as an image asset with a paired `> [!NOTE]`; otherwise, generate a structured Pseudocode Algorithm Box in ````text```` format (Mermaid flowcharts in `Pipeline` are strictly forbidden). `Experiment` begins with the research-logic overview diagram. Never generate redundant text tables duplicating bullet sentences.
+11. **Pipeline & diagrams**: `Pipeline` presents the runtime execution view. When the paper contains an Algorithm flowchart or pseudocode diagram, capture it directly as an image asset with a paired `> [!NOTE]`; otherwise, draw a syntax-safe Mermaid flowchart (`flowchart LR`) with double-quoted labels and styled node classes. `Experiment` begins with the research-logic overview diagram. Never generate redundant text tables duplicating bullet sentences.
 12. **Figures, tables, Visual QA & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, visually inspected after cropping (table screenshots must include header + full data rows; multi-panel figures must be unclipped), and immediately followed by a `> [!NOTE]` whose English visual anchors and numbers match both the image and the paper source.
 13. **Delimiters & foldability**: Math uses only `$...$` and standalone `$$...$$` with blank lines before/after (never glued to bullet lines); all child content is indented with 2 spaces under its owning list item.
 14. **Selective `>` & core-Component explanation layer**: Every core/novel `Component` in `Core Mechanism` must carry an indented operator/equation breakdown or `>` explanation block (input → transformation → output and design rationale), while routine/off-the-shelf components stay 1 sentence; for `Motivation` and `Critical Thinking`, add `>` blocks on demand when conceptual leaps or hidden derivations exist (using toy-dimension examples, `**Step N**` `←` step-by-step recurrences, and buffer lifecycles where helpful). Omit `>` on `Takeaway`, `Contribution`, and `Experiment` (use `> [!NOTE]` there), and keep plain `>` separated from `> [!NOTE]`.
