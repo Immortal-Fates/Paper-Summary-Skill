@@ -11,7 +11,10 @@ import tempfile
 import urllib.request
 from pathlib import Path
 from PIL import Image, ImageChops
-import pypdf
+try:
+    import pypdf
+except ImportError:
+    pypdf = None
 
 def trim_image(im, padding=10, threshold=15):
     rgb = im.convert("RGB")
@@ -97,17 +100,139 @@ def crop_image(input_image_path, output_path, pct=None, box=None, box_wh=None, t
     return out_p
 
 def find_in_pdf(pdf_path, query):
-    reader = pypdf.PdfReader(pdf_path)
-    q_lower = query.lower()
-    matches = []
-    for idx, page in enumerate(reader.pages, start=1):
-        text = page.extract_text() or ""
-        if q_lower in text.lower():
-            matching_lines = [
-                line.strip() for line in text.splitlines() if q_lower in line.lower()
-            ]
-            matches.append((idx, matching_lines[:3]))
-    return matches
+    if pypdf:
+        reader = pypdf.PdfReader(pdf_path)
+        q_lower = query.lower()
+        matches = []
+        for idx, page in enumerate(reader.pages, start=1):
+            text = page.extract_text() or ""
+            if q_lower in text.lower():
+                matching_lines = [
+                    line.strip() for line in text.splitlines() if q_lower in line.lower()
+                ]
+                matches.append((idx, matching_lines[:3]))
+        return matches
+    else:
+        cmd = ["pdftotext", str(Path(pdf_path).resolve()), "-"]
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        if res.returncode != 0:
+            return []
+        pages = res.stdout.split("\x0c")
+        q_lower = query.lower()
+        matches = []
+        for idx, text in enumerate(pages, start=1):
+            if q_lower in text.lower():
+                matching_lines = [
+                    line.strip() for line in text.splitlines() if q_lower in line.lower()
+                ]
+                matches.append((idx, matching_lines[:3]))
+        return matches
+
+def scan_figures(source_dir_or_file):
+    p = Path(source_dir_or_file).resolve()
+    if p.is_dir():
+        tex_files = sorted(list(p.glob("**/*.tex")))
+    elif p.suffix == ".tex":
+        tex_files = [p]
+    else:
+        tex_files = []
+
+    results = []
+    if tex_files:
+        combined_text = ""
+        for tf in tex_files:
+            combined_text += f"\n% --- FILE: {tf.name} ---\n" + tf.read_text(encoding="utf-8", errors="ignore")
+
+        sec_matches = list(re.finditer(r"\\section\*?\{([^}]+)\}", combined_text))
+        def get_sec(pos):
+            cur = "Introduction / Frontmatter"
+            for sm in sec_matches:
+                if sm.start() <= pos:
+                    cur = sm.group(1).strip()
+                else: break
+            return cur
+
+        fig_blocks = list(re.finditer(r"\\begin\{figure\*?\}(.*?)\\end\{figure\*?\}", combined_text, re.DOTALL))
+        for idx, fb in enumerate(fig_blocks, 1):
+            content = fb.group(1)
+            def_sec = get_sec(fb.start())
+
+            img_m = re.findall(r"\\includegraphics(?:\[.*?\])?\{([^}]+)\}", content)
+            lbl_m = re.findall(r"\\label\{([^}]+)\}", content)
+            cap_m = re.findall(r"\\caption(?:\[.*?\])?\{([^}]+)\}", content)
+
+            img = img_m[0] if img_m else "N/A"
+            lbl = lbl_m[0] if lbl_m else "N/A"
+            raw_cap = cap_m[0] if cap_m else "N/A"
+
+            cited_secs = []
+            if lbl != "N/A":
+                ref_pat = re.compile(r"\\ref\{" + re.escape(lbl) + r"\}")
+                for rm in ref_pat.finditer(combined_text):
+                    cs = get_sec(rm.start())
+                    if cs not in cited_secs:
+                        cited_secs.append(cs)
+
+            cap_clean = re.sub(r"\\[a-zA-Z]+", "", raw_cap).replace("{", "").replace("}", "")
+            cap_clean = re.sub(r"\s+", " ", cap_clean).strip()
+
+            is_fw = bool(re.search(r"overview|architecture|framework|pipeline|model|workflow|diagram|schematic", cap_clean, re.I))
+            is_exp = bool(re.search(r"benchmark|comparison|accuracy|performance|vs\.|scaling|results|ablation|efficiency|scatter|curve", cap_clean, re.I))
+
+            cited_in_method = any(re.search(r"approach|method|architecture|framework", cs, re.I) for cs in cited_secs)
+            cited_in_exp = any(re.search(r"experiment|evaluation|results|benchmark", cs, re.I) for cs in cited_secs)
+
+            if (is_fw or cited_in_method) and not is_exp:
+                role = "CORE_FRAMEWORK"
+                suggestion = "Use in * Core Mechanism"
+            elif is_exp or cited_in_exp:
+                role = "EXPERIMENT"
+                suggestion = "Use in * Experiment"
+            else:
+                role = "MECHANISM_DETAIL"
+                suggestion = "Use under child Component or ablation"
+
+            results.append({
+                "index": idx,
+                "role": role,
+                "suggestion": suggestion,
+                "asset": img,
+                "label": lbl,
+                "defined_in": def_sec,
+                "cited_in": cited_secs,
+                "caption": cap_clean
+            })
+    elif p.suffix == ".pdf":
+        cmd = ["pdftotext", str(p), "-"]
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        if res.returncode == 0:
+            text = res.stdout
+            matches = re.finditer(r"(Figure\s+(\d+)[\.:]\s*(.*?))(?=\n\s*\n|Figure\s+\d+[\.:]|$)", text, re.DOTALL | re.IGNORECASE)
+            for m in matches:
+                full_cap = re.sub(r"\s+", " ", m.group(1)).strip()
+                fig_num = m.group(2)
+                is_fw = bool(re.search(r"overview|architecture|framework|pipeline|model|workflow|diagram", full_cap, re.I))
+                is_exp = bool(re.search(r"benchmark|comparison|accuracy|vs\.|scaling|results|ablation", full_cap, re.I))
+                if is_fw and not is_exp:
+                    role = "CORE_FRAMEWORK"
+                    sugg = "Use in * Core Mechanism"
+                elif is_exp:
+                    role = "EXPERIMENT"
+                    sugg = "Use in * Experiment"
+                else:
+                    role = "MECHANISM_DETAIL"
+                    sugg = "Use under child Component"
+                results.append({
+                    "index": int(fig_num),
+                    "role": role,
+                    "suggestion": sugg,
+                    "asset": f"Figure {fig_num} (render page)",
+                    "label": f"fig:{fig_num}",
+                    "defined_in": "PDF",
+                    "cited_in": [],
+                    "caption": full_cap[:150]
+                })
+    return results
 
 def extract_raw_images(pdf_path, output_dir, page_num=None):
     out_dir = Path(output_dir).resolve()
@@ -221,6 +346,10 @@ def main():
     p_info.add_argument("--pdf", help="Path to PDF file.")
     p_info.add_argument("--image", help="Path to image file.")
 
+    # scan-figures
+    p_scan = subparsers.add_parser("scan-figures", help="Scan LaTeX source or PDF to extract and categorize all figures by caption & section citation.")
+    p_scan.add_argument("--source", required=True, help="Path to source directory, .tex file, or PDF.")
+
     args = parser.parse_args()
 
     if args.command == "render":
@@ -258,10 +387,32 @@ def main():
         assets = fetch_arxiv_assets(args.id, args.output_dir)
         print(f"Retrieved {len(assets)} assets to {args.output_dir}")
 
+    elif args.command == "scan-figures":
+        figures = scan_figures(args.source)
+        if not figures:
+            print(f"No figures detected in {args.source}")
+        else:
+            print(f"\n=== Detected {len(figures)} figures in {args.source} ===")
+            for fig in figures:
+                print(f"\n[Figure {fig['index']}] -> {fig['role']}")
+                print(f"  Target Role:   {fig['suggestion']}")
+                print(f"  Asset File:    {fig['asset']}")
+                print(f"  Label:         {fig['label']}")
+                print(f"  Defined In:    \\section{{{fig['defined_in']}}}")
+                if fig['cited_in']:
+                    print(f"  Cited In:      {', '.join(f'\\\\section{{{s}}}' for s in fig['cited_in'])}")
+                print(f"  Caption:       {fig['caption']}")
+            print("\n=======================================================")
     elif args.command == "info":
         if args.pdf:
-            reader = pypdf.PdfReader(args.pdf)
-            print(f"PDF: {args.pdf}, Pages: {len(reader.pages)}")
+            if pypdf:
+                reader = pypdf.PdfReader(args.pdf)
+                print(f"PDF: {args.pdf}, Pages: {len(reader.pages)}")
+            else:
+                cmd = ["pdftotext", str(Path(args.pdf).resolve()), "-"]
+                res = subprocess.run(cmd, capture_output=True, text=True)
+                pages = len(res.stdout.split("\x0c")) - 1
+                print(f"PDF: {args.pdf}, Pages: ~{pages}")
         if args.image:
             im = Image.open(args.image)
             print(f"Image: {args.image}, Dimensions: {im.size[0]}x{im.size[1]} (WxH)")
