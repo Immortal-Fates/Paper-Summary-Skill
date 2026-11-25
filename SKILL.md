@@ -1,13 +1,13 @@
 ---
 name: paper-summary
-description: Summarize a paper into a concise, insight-led Typora-friendly markdown note with Takeaway, Contribution, Motivation, Core Mechanism, Mermaid Pipeline, Experiment, and Critical Thinking.
+description: Summarize a paper into a concise, insight-led Typora-friendly markdown note with Takeaway, Contribution, Motivation, Core Mechanism, Pipeline, Experiment, and Critical Thinking.
 ---
 
 ## What I do
 
 This skill transforms a reliable paper link into a structured, insight-led paper summary in Typora-friendly markdown.
 
-Summaries are written in Chinese-dominant mixed-language style across all sections (preserving English technical proper nouns inside concise Chinese prose). The note opens with `Takeaway` and `Contribution` for immediate executive orientation, defines the unresolved problem in `Motivation`, establishes the `Core Mechanism` followed immediately by its runtime Mermaid `Pipeline`, delivers experimental evidence in `Experiment`, and concludes with rigorous `Critical Thinking`.
+Summaries are written in Chinese-dominant mixed-language style across all sections (preserving English technical proper nouns inside concise Chinese prose). The note opens with `Takeaway` and `Contribution` for immediate executive orientation, defines the unresolved problem in `Motivation`, establishes the `Core Mechanism` followed immediately by its runtime `Pipeline` (captured Algorithm diagram or Mermaid), delivers experimental evidence in `Experiment`, and concludes with rigorous `Critical Thinking`.
 
 ## Core conventions
 
@@ -48,7 +48,7 @@ Follow this exact section order:
 
 * Contribution
 
-  <用 1 句中文直接定性论文核心学术价值归属（新 challenge、新 solution 或新 research paradigm），与实际证据范围一致。>
+  <用 1 句高站位中文直接定性论文在技术树与学科领域中的核心学术定位与宏观贡献（若为里程碑论文，直接指明其开创/确立的全新 Research Paradigm 或根本性突破；普通论文则定性其解决的关键 Challenge 或提供的核心 Solution，避免矮化为局部实现细节）。>
 
 * Motivation
 
@@ -88,6 +88,13 @@ Follow this exact section order:
 
 * Pipeline
 
+  <!-- 形式 A：若论文包含 Algorithm 流程图或伪代码框，直接截图截取，无需编写 Mermaid 流程图 -->
+  ![Algorithm Flowchart](assets/<note-file-base>.assets/algorithm.png)
+
+  > [!NOTE]
+  > **Algorithm 1. <Algorithm name or caption>.** **Input / State: ...** <说明初始状态与参数输入>；**Core Loop: ...** <说明核心循环迭代与更新逻辑>；**Output: ...** <说明返回结果与收敛边界>。
+
+  <!-- 形式 B：若论文无现成 Algorithm 图/框，使用 Mermaid 绘制运行时机制流程图 -->
   ```mermaid
   flowchart LR
       Input[Observe request] --> Model[Core predictor]
@@ -101,7 +108,7 @@ Follow this exact section order:
       class Input,Model process
       class Gate decision
       class Review future
-```
+  ```
 
 * Experiment
 
@@ -149,8 +156,8 @@ Follow this exact section order:
 - Never wrap in backticks, quotes, or code fences. Do NOT write an English-only sentence in this section.
 
 ### Contribution
-- **Strictly 1 concise sentence in Chinese**: Placed directly after `Takeaway` for immediate executive-level orientation.
-- Classify the paper's primary value as a new challenge, new solution, or new research paradigm within verified evidence bounds. Never claim broader impact than demonstrated.
+- **Strictly 1 concise high-stature sentence in Chinese**: Placed directly after `Takeaway` for immediate executive-level orientation.
+- **Macro-level positioning (宏观定调，确立范式)**: Define the paper's primary value on the global academic tree. For milestone papers, boldly and directly declare the foundational research paradigm it pioneered or established (e.g., 开辟了……新范式 / 打破了……技术垄断 / 确立了……基础理论), establishing its macro stature upfront rather than reducing it to a narrow local implementation; for regular papers, classify its core value (New Challenge, New Solution, or Domain Benchmark) within verified evidence bounds.
 
 ### Motivation
 - **Content strictly in Chinese**: Only the bold captions (`**Core Problem**:`, `**Why Existing Routes Fail**:`) are in English Title Case. The explanation body must be written in concise **Chinese-dominant** prose. Never write English paragraphs in Motivation.
@@ -180,8 +187,8 @@ Follow this exact section order:
 
 ### Pipeline
 - Placed immediately after `Core Mechanism` as the runtime/dynamic execution view of the method.
-- **Mermaid flowchart only**: Do NOT write numbered text lists.
-- Default to `flowchart LR` for readable horizontal layout in Typora; use `flowchart TD` only if strictly hierarchical.
+- **Algorithm Flowchart Priority & Mermaid Omission**: When the paper contains an explicit Algorithm flowchart or pseudocode diagram (e.g. `Algorithm 1`), capture that diagram/flowchart directly as an image asset under `Pipeline` accompanied by its paired `> [!NOTE]`. **In this case, writing an additional Mermaid flowchart is redundant and MUST be omitted**.
+- **Fallback Mermaid flowchart**: Only when the paper lacks a ready-made Algorithm flowchart or process diagram, draw an action-specific Mermaid flowchart (`flowchart LR` for readable horizontal layout in Typora; `flowchart TD` only if strictly hierarchical). Do NOT write numbered text lists.
 - Diagram the actual evaluated mechanism, not idealized lifecycles. Use action-oriented labels and named branches (`Accepted`, `Fallback`, not bare `Yes`/`No`).
 - Distinguish evaluated modules from proposed/future integration using explicit `classDef` styles.
 
@@ -194,7 +201,7 @@ Follow this exact section order:
 
 ### Critical Thinking
 - Pure reflection and critical analysis across 5 dimensions (each bullet strictly 1 concise sentence):
-  1. `**Pros**`: Architectural/methodological strengths. Include `**Paradigm Demonstration**` only for verified milestone papers with cited successors.
+  1. `**Pros**`: Architectural/methodological strengths. Include `**Paradigm Demonstration**` only for verified milestone papers as a concrete evidence inventory: cite the specific downstream successor papers, foundation models, or open-source projects that explicitly adopted its core framework, formulation, or training paradigm (serving as post-hoc literature evidence for the macro claim in `Contribution`). Omit this bullet for ordinary papers.
   2. `**Cons**`: Concrete failure modes under `**Failure Mode: <Name>**:` (breakdown conditions, pathological cases, bandwidth/compute-ratio violations, synchronization/sample divergence, or load imbalance such as `Causal Mask` skew).
   3. `**Trade-offs**`: What was sacrificed (latency, compute, communication complexity, batch-size / sequence-length lower bounds, or autonomy) and whether the exchange is practically justified.
   4. `**Empirical Support**`: Fairness of baselines, numerical precision settings (`Full Precision` vs `Mixed Precision`), compute-budget caps, synthetic vs realistic benchmarks, ablation rigor, and separation of main vs appendix/`\ifanonymous` results.
@@ -216,7 +223,14 @@ Follow this exact section order:
 ### Formulas and callouts
 - **Math delimiters & blank lines**: Strictly `$...$` for inline math; standalone `$$` blocks for display equations. Standalone `$$...$$` blocks must have a blank line before and after. Never place a display formula on the same line as a markdown bullet (`*`) or text. Never use LaTeX `\( ... \)` or `\[ ... \]`.
 - **Figure & Table NOTE**: Every embedded image must be immediately followed by exactly one `> [!NOTE]` at the same indentation level. First line must be a concise overview reusing original caption; followed by explanation using English visual anchors (`**Top: ...**`, `**Left: ...**`, `**(b) ...**`, `**Row: ...**`) that accurately match each panel's actual visual role.
-- **Asset capture & Visual QA**: After cropping/saving any figure or table image, **inspect the saved image directly** before referencing it. Every table screenshot must capture the **caption/header plus all principal data rows** (never leave a header-only or truncated crop); multi-panel figures must keep all cited subfigures intact. Every number, hardware spec, and anchor in `> [!NOTE]` and the surrounding prose must be verified against both the visible image pixels and the paper source—never extrapolate or fill numbers from memory.
+- **Asset capture & Visual QA**: After cropping/saving any figure, table, or algorithm image, **inspect the saved image directly** before referencing it. Every table screenshot must capture the **caption/header plus all principal data rows** (never leave a header-only or truncated crop); multi-panel figures must keep all cited subfigures intact; algorithm blocks must capture the full algorithm boundary including input, loop body, and output. Every number, hardware spec, and anchor in `> [!NOTE]` and the surrounding prose must be verified against both the visible image pixels and the paper source—never extrapolate or fill numbers from memory.
+- **Asset extraction toolchain**: Use the bundled script `scripts/extract_assets.py` for all figure, table, and algorithm extraction:
+  1. *Locate targets in PDF*: `python3 scripts/extract_assets.py find --pdf <paper.pdf> --query "Algorithm 1"` (or `"Figure 1"`).
+  2. *Render PDF page*: `python3 scripts/extract_assets.py render --pdf <paper.pdf> --page <N> --output /tmp/page_<N>.png`.
+  3. *Visual coordinate calibration*: Call `view_image /tmp/page_<N>.png` to visually locate bounding box percentages (`--pct top,left,bottom,right`).
+  4. *Crop with auto-trim*: `python3 scripts/extract_assets.py crop --image /tmp/page_<N>.png --pct <top,left,bottom,right> --trim --output assets/<note-file-base>.assets/<filename>.png` (supports direct PDF cropping via `--pdf <paper.pdf> --page <N>`).
+  5. *arXiv direct extraction*: For arXiv papers, run `python3 scripts/extract_assets.py arxiv --id <arxiv_id_or_url> --output-dir assets/<note-file-base>.assets/` to unpack original vector/raster assets directly.
+  6. *Visual QA*: Execute `view_image` on the cropped image to verify full visual integrity prior to embedding in the note.
 - **Asset paths**: Save images locally to `assets/<note-file-base>.assets/<filename>` and reference with relative paths (`assets/<note-file-base>.assets/<filename>` or `./assets/<note-file-base>.assets/<filename>`).
 
 ## Source priority and PDF fallback
@@ -232,7 +246,7 @@ Follow this exact section order:
 Before completing the summary, verify every invariant:
 1. **Metadata line**: Begins with full paper title in bold; author list truncated to `First Author et al.` when > 3 authors; contains mandatory `(Citations __N__)` or `(Citations __unknown__)`.
 2. **Strict single-sentence brevity & zero meta-prefixes**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (target ~30–60 Chinese characters, no semicolon chaining, no run-on clauses, high insight density), without stripping required operators, tensor shapes, or quantitative bounds, and contains zero meta-instruction prefixes (`单句说明……：`, `一句话概括……：`).
-3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single sentence classifying primary value).
+3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single high-stature sentence establishing macro-level academic positioning and paradigm value).
 4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
 5. **Paper-faithful Core Mechanism & Pipeline flow**: Route `Core Mechanism` to the paper's actual type. Only use `\underbrace` multi-term objectives, `Learnable State`, forward/backward `STE` sub-bullets, and chained inference arrows when the paper itself defines those constructs; for systems/parallelism/algorithmic papers, present the paper's real governing thresholds, resource/complexity bounds, and core operators without forcing artificial component splits or fabricating equations. Followed immediately by `Pipeline` before `Experiment`.
 6. **Source-grounded micro-mechanism transparency**: Ban abstract hand-waving (e.g., "提取特征", "压缩瓶颈") and formula fabrication. Every equation, operator, tensor shape/memory bound ($H \times W \times D$, $6bch$), and threshold ($c \ge F/B$) must come verbatim or faithfully from the paper source.
@@ -240,7 +254,7 @@ Before completing the summary, verify every invariant:
 8. **Language policy**: Every section (including `Takeaway`) uses concise Chinese-dominant prose with English technical proper nouns preserved; only section headings and bold captions/labels are in English Title Case (never write English-only paragraphs or English-only `Takeaway`).
 9. **Proper nouns in English**: All technical terms, module names, parallelism strategies, architecture concepts, and benchmark names strictly preserve their standard English terminology; never translate them into localized Chinese (e.g., strictly use "Vector Quantizer", "Encoder / Decoder", "Blockwise FeedForward", "Online Softmax", "Tensor Parallelism").
 10. **Takeaway**: Exactly 1 Chinese-dominant mixed-language causal insight punchline (Mechanism + Innovation -> Solved Bottleneck), preserving English technical proper nouns without noun-stacking formulas (`Method = A + B + C`), quotes, code fences, or backticks.
-11. **Mermaid diagrams & no table duplication**: `Pipeline` is an action-specific flowchart with styled node classes; `Experiment` begins with the research-logic overview diagram. Never generate redundant text tables duplicating bullet sentences.
+11. **Pipeline & diagrams**: `Pipeline` presents the runtime execution view. When the paper contains an Algorithm flowchart or pseudocode diagram, capture it directly as an image asset with a paired `> [!NOTE]` (Mermaid is omitted as redundant); otherwise, draw an action-specific Mermaid flowchart with styled node classes. `Experiment` begins with the research-logic overview diagram. Never generate redundant text tables duplicating bullet sentences.
 12. **Figures, tables, Visual QA & NOTEs**: Every image is saved under `assets/<note-file-base>.assets/`, visually inspected after cropping (table screenshots must include header + full data rows; multi-panel figures must be unclipped), and immediately followed by a `> [!NOTE]` whose English visual anchors and numbers match both the image and the paper source.
 13. **Delimiters & foldability**: Math uses only `$...$` and standalone `$$...$$` with blank lines before/after (never glued to bullet lines); all child content is indented with 2 spaces under its owning list item.
 14. **Selective `>` & core-Component explanation layer**: Every core/novel `Component` in `Core Mechanism` must carry an indented operator/equation breakdown or `>` explanation block (input → transformation → output and design rationale), while routine/off-the-shelf components stay 1 sentence; for `Motivation` and `Critical Thinking`, add `>` blocks on demand when conceptual leaps or hidden derivations exist (using toy-dimension examples, `**Step N**` `←` step-by-step recurrences, and buffer lifecycles where helpful). Omit `>` on `Takeaway`, `Contribution`, and `Experiment` (use `> [!NOTE]` there), and keep plain `>` separated from `> [!NOTE]`.

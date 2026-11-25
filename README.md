@@ -50,7 +50,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
    - **系统/架构类论文**：首句给出 `**Core Framework: <Framework Name>**`（概述闭环并明确点明系统组成）；复合目标函数强制使用 `\underbrace` 进行自解释命名并单句讲清各自分工与防退化目的；将 Codebook/参数库作为独立实体（`**Learnable State: <Codebook>**`）定义参数容量与更新动力学；核心算子原子化展开为前向张量坐标匹配与反向算子技巧（如 STE 导数）；生成模型以单行链式推理箭头公式闭环；
    - **非系统/理论类论文**：弹性平铺 `**Core Formulation: <Name>**` 与 `**Theoretical Property: <Name>**`；
    - 公式紧随对应要点，独立块公式前后必须留空行（严禁与列表行粘连），图表均附带英文方位视觉锚点（如 `**Top: ...**`、`**Left: ...**`）的 `> [!NOTE]` 说明。
-5. **Pipeline**：紧跟 Core Mechanism 作为动态运行时流程图，纯 Mermaid 机制与决策流程图（默认 `flowchart LR`），使用统一的高对比度色彩类区分普通处理、判定节点与未来扩展。
+5. **Pipeline**：紧跟 Core Mechanism 作为动态运行时流程图。若论文包含 Algorithm 流程图或伪代码框图，直接截取并附带 `> [!NOTE]` 说明，此时无需重复编写 Mermaid（避免冗余）；若无现成算法图，则使用纯 Mermaid 机制与决策流程图（默认 `flowchart LR`），使用统一的高对比度色彩类区分普通处理、判定节点与未来扩展。
 6. **Experiment**：以 Mermaid 研究逻辑图开篇（串联“问题发现 → 可学习性 → 模型预测 → 边界分析”），随后单条目提炼各关键实验（严格单句，25～45字），并截取主结果表图片（严禁在单句下方重复堆砌内容一致的纯文本表格）。
 7. **Critical Thinking**：纯粹的深度批判与反思，每个子要点严格单句，涵盖 `Pros`（含里程碑论文可选的 `Paradigm Demonstration`）、`Cons`（具象的 `Failure Mode: <Name>`）、`Trade-offs`（性能与代价置换评估）、`Empirical Support`（实验公正性与消融盲区）及 `Future Directions`（下一步瓶颈）。
 
@@ -62,7 +62,7 @@ ${CODEX_HOME:-~/.codex}/skills/paper-summary/
 - **直接自主执行（Direct Autonomous Execution）**：收到总结指令后默认仅针对目标论文本身直接执行，严禁停下来主动向用户询问总结范围、衍生工作或内容深度。
 - **认知流顺畅（Cognitive Flow）**：顶层方案与定位先行（Takeaway + Contribution） → 问题与机制（Motivation + Core Mechanism + Pipeline） → 验证与批判（Experiment + Critical Thinking）。
 - **高信息密度与严格单句**：严禁废话与长篇大论，每个要点强制限制在严格单句（25～45字）内，禁止分号断句拼凑或从句堆叠。
-- **本地相对资产**：图表截图统一下载到相对路径 `assets/<note-file-base>.assets/`，确保跨平台与 Typora 本地离线正常渲染。
+- **本地相对资产与提取工具**：图表截图统一下载到相对路径 `assets/<note-file-base>.assets/`；内置 `scripts/extract_assets.py` 工具支持 PDF 页面高清渲染、精确坐标裁剪、自动白边修剪与 arXiv 源码包图表直接抽取，确保跨平台与 Typora 本地离线正常渲染。
 - **严谨排版**：行内公式严格使用 `$...$`，独立块公式使用 `$$`；层级统一缩进 2 格以适配 Typora 大纲折叠。
 
 更多详细规则以 [SKILL.md](SKILL.md) 为准。
