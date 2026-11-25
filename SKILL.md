@@ -49,7 +49,7 @@ Follow this exact section order:
 7. `Critical Thinking`
 
 ```markdown
-**<Full Paper Title>**. <Author 1, Author 2, Author 3 | First Author et al.>. **<Venue>**, **<Year>**. [(Paper)](URL) [(Project)](URL) (Citations __N__)
+**<Full Paper Title>**. <Author 1, Author 2, Author 3 | First Author et al.> (<Affiliation / Research Team>). **<Venue>**, **<Year>**. [(Paper)](URL) [(Project)](URL) (Citations __N__)
 
 * Takeaway
 
@@ -219,14 +219,15 @@ Follow this exact section order:
 
 ## Formatting and asset rules
 
-### Citation metadata and author truncation
+### Citation metadata, authors, and research team
 - Title line format:
   ```markdown
-  **<Full Paper Title>**. <Authors>. **<Venue>**, **<Year>**. [(Paper)](URL) [(Project)](URL) (Citations __N__)
+  **<Full Paper Title>**. <Authors> (<Affiliation / Research Team>). **<Venue>**, **<Year>**. [(Paper)](URL) [(Project)](URL) (Citations __N__)
 ```
 - **Author list constraint**:
   - 1 to 3 authors: list all names (`Author 1, Author 2, Author 3`).
   - More than 3 authors: strictly truncate to first author plus et al.: `First Author et al.`.
+- **Mandatory Affiliation / Research Team**: Append the primary research institution, key university/lab, or enterprise research team in parentheses immediately after the author string, e.g., `Shen Nie et al. (RUC & Ant Group)` or `Jacob Austin et al. (Google Research)`. This establishes immediate research lineage, compute tier, and institutional credibility upfront.
 - **Mandatory citation count**: Include `(Citations __N__)` verified from Semantic Scholar (`[(S2)](URL)`), OpenAlex, Google Scholar, or Crossref. If truly unresolvable, write `(Citations __unknown__)`. Never omit this field.
 
 ### Formulas and callouts
@@ -253,7 +254,7 @@ Follow this exact section order:
 ## Hard invariants (Completion checklist)
 
 Before completing the summary, verify every invariant:
-1. **Metadata line**: Begins with full paper title in bold; author list truncated to `First Author et al.` when > 3 authors; contains mandatory `(Citations __N__)` or `(Citations __unknown__)`.
+1. **Metadata line**: Begins with full paper title in bold; author list truncated to `First Author et al.` when > 3 authors; includes mandatory research team / institution in parentheses `(<Affiliation / Team>)`; contains mandatory `(Citations __N__)` or `(Citations __unknown__)`.
 2. **Strict single-sentence brevity & zero meta-prefixes**: Every bullet point across `Contribution`, `Motivation`, `Core Mechanism`, `Experiment`, and `Critical Thinking` is strictly **1 single sentence** (target ~30–60 Chinese characters, no semicolon chaining, no run-on clauses, high insight density), without stripping required operators, tensor shapes, or quantitative bounds, and contains zero meta-instruction prefixes (`单句说明……：`, `一句话概括……：`).
 3. **Top-level orientation**: `Takeaway` is immediately followed by `Contribution` (single high-stature sentence establishing macro-level academic positioning and paradigm value).
 4. **Pure motivation**: `Motivation` contains exactly 2 bullets (`Core Problem` and `Why Existing Routes Fail`) without leaking solution/method names.
